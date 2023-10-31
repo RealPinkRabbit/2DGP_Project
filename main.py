@@ -1,9 +1,24 @@
 from pico2d import *
 
+class blue_stone:
+    image = None
+    def __init__(self, x = 400, y = 100):
+        self.x, self.y = x, y
+        if (blue_stone.image == None):
+            blue_stone.image = load_image('blue_stone.png')
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+    def update(self):
+        pass
+
 def create_world():
     global running
+    global stone1
 
     running = True
+    stone1 = blue_stone()
     pass
 
 def handle_events():
@@ -18,10 +33,12 @@ def handle_events():
     pass
 
 def update_world():
+    stone1.update()
     pass
 
 def render_world():
     clear_canvas()
+    stone1.draw()
     update_canvas()
     pass
 
