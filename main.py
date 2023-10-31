@@ -2,9 +2,11 @@ from pico2d import *
 
 class blue_stone:
     image = None
-    def __init__(self, x = 400, y = 100):
+    minV = 0.1
+    vDecRate = 0.99
+    def __init__(self, x = 100, y = 300):
         self.x, self.y = x, y
-        self.vx, self.vy = -25, 13
+        self.vx, self.vy = 5, 0
         if (blue_stone.image == None):
             blue_stone.image = load_image('blue_stone.png')
 
@@ -13,13 +15,13 @@ class blue_stone:
 
     def update(self):
         self.x += self.vx
-        self.vx *= 0.9
-        if (self.vx > -0.5) & (self.vx < 0.5):
+        self.vx *= blue_stone.vDecRate
+        if (self.vx > -blue_stone.minV) & (self.vx < blue_stone.minV):
             self.vx = 0
 
         self.y += self.vy
-        self.vy *= 0.9
-        if (self.vy > -0.5) & (self.vy < 0.5):
+        self.vy *= blue_stone.vDecRate
+        if (self.vy > -blue_stone.minV) & (self.vy < blue_stone.minV):
             self.vy = 0
 
         pass
@@ -59,5 +61,5 @@ while running:
     handle_events()
     update_world()
     render_world()
-    delay(0.1)
+    delay(0.01)
 close_canvas()
