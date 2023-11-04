@@ -1,5 +1,6 @@
 from pico2d import *
 from stone import blue_stone
+import game_world
 from math import *
 
 canvas_width = 1280
@@ -7,10 +8,12 @@ canvas_height = 800
 
 def create_world():
     global running
-    global stone1
+    global stone_1
 
     running = True
-    stone1 = blue_stone()
+
+    stone_1 = blue_stone()
+    game_world.add_object(stone_1)
     pass
 
 def handle_events():
@@ -25,12 +28,12 @@ def handle_events():
     pass
 
 def update_world():
-    stone1.update()
+    game_world.update_object()
     pass
 
 def render_world():
     clear_canvas()
-    stone1.draw()
+    game_world.render()
     update_canvas()
     pass
 
