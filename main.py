@@ -13,7 +13,7 @@ def create_world():
     running = True
 
     stone_1 = blue_stone()
-    game_world.add_object(stone_1)
+    game_world.add_object(stone_1, 0)
     pass
 
 def handle_events():
