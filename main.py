@@ -8,12 +8,15 @@ canvas_height = 800
 
 def create_world():
     global running
-    global stone_1
+    global stone_1, stone_2
 
     running = True
 
     stone_1 = blue_stone()
+    stone_2 = blue_stone(164, 164)
+
     game_world.add_object(stone_1, 0)
+    game_world.add_object(stone_2, 0)
     pass
 
 def handle_events():

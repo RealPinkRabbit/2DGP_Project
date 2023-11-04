@@ -14,9 +14,9 @@ class blue_stone:
     minV = 0.02
     vDecRate = 0.98
 
-    def __init__(self, x = 600, y = 500):
+    def __init__(self, x = 100, y = 100):
         self.x, self.y = x, y
-        self.vx, self.vy = 100, -100
+        self.vx, self.vy = 30, 30
         self.radius = 32
         if (blue_stone.image == None):
             blue_stone.image = load_image('Stone_Blue_64x64.png')
@@ -28,7 +28,7 @@ class blue_stone:
         self.x += self.vx
         self.y += self.vy
 
-        self.stone_wall_collision_check()
+        self.stone_wall_collision()
 
         self.vx *= blue_stone.vDecRate
         if (fabs(self.vx) < blue_stone.minV):
@@ -38,7 +38,7 @@ class blue_stone:
         if (fabs(self.vx) < blue_stone.minV):
             self.vy = 0
 
-    def stone_wall_collision_check(self):
+    def stone_wall_collision(self):
         if (self.x < x_min_boundary + self.radius):
             self.x += 2*(self.radius - (self.x - x_min_boundary))
             self.vx *= -1
