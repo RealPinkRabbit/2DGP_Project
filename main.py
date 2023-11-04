@@ -33,7 +33,7 @@ def update_world():
 
 def render_world():
     clear_canvas()
-    game_world.render()
+    game_world.render_object()
     update_canvas()
     pass
 
