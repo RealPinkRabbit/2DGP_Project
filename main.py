@@ -1,6 +1,9 @@
 from pico2d import *
 from math import *
 
+canvas_width = 1280
+canvas_height = 800
+
 class blue_stone:
     image = None
     minV = 0.02
@@ -56,7 +59,7 @@ def render_world():
     update_canvas()
     pass
 
-open_canvas(1280, 800)
+open_canvas(canvas_width, canvas_height)
 create_world()
 while running:
     handle_events()
