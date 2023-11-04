@@ -8,7 +8,7 @@ class blue_stone:
         self.x, self.y = x, y
         self.vx, self.vy = 5, 3
         if (blue_stone.image == None):
-            blue_stone.image = load_image('blue_stone.png')
+            blue_stone.image = load_image('Stone_Blue_64x64.png')
 
     def draw(self):
         self.image.draw(self.x, self.y)
