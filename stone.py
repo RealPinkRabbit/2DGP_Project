@@ -1,5 +1,5 @@
 from pico2d import *
-from math import *
+from math import fabs, pow, sqrt, acos
 
 # 추후 조정
 x_min_boundary = 0
@@ -58,7 +58,18 @@ class blue_stone:
 
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
-            self.x, self.y, self.vx, self.vy = 100, 100, 0, 0
-            oppo.x, oppo.y, oppo.vx, oppo.vy = 100, 200, 0, 0
-            print("baaam")
             pass
+
+    def get_unit_vector_x(self):
+        div = sqrt(pow(self.vx, 2)+pow(self.vy, 2))
+        return self.vx/div
+
+    def get_unit_vector_y(self):
+        div = sqrt(pow(self.vx, 2)+pow(self.vy, 2))
+        return self.vy/div
+
+    def get_power(self):
+        return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
+
+    def get_radian(self):
+        return acos(self.vx/self.get_power())
