@@ -1,6 +1,8 @@
 from pico2d import *
 from math import fabs, pow, sqrt, acos
 
+import game_world
+
 # 추후 조정
 x_min_boundary = 0
 x_max_boundary = 1280
@@ -60,16 +62,25 @@ class blue_stone:
         if group == 'stone:stone':
             pass
 
-    def get_unit_vector_x(self):
-        div = sqrt(pow(self.vx, 2)+pow(self.vy, 2))
-        return self.vx/div
+    @staticmethod
+    def get_unit_vector_x(vx, vy):
+        div = sqrt(pow(vx, 2)+pow(vy, 2))
+        return vx/div
 
-    def get_unit_vector_y(self):
-        div = sqrt(pow(self.vx, 2)+pow(self.vy, 2))
-        return self.vy/div
+    @staticmethod
+    def get_unit_vector_y(vx, vy):
+        div = sqrt(pow(vx, 2)+pow(vy, 2))
+        return vy/div
 
     def get_power(self):
         return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
 
     def get_radian(self):
         return acos(self.vx/self.get_power())
+
+    @staticmethod
+    def get_relative_collision_xy(avx, avy, ovx, ovy):
+        rvx, rvy = ovx-avx, ovy-avy
+        rvx *= -1
+        rvy *= -1
+        return 32 * rvx, 32 * rvy
