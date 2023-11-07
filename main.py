@@ -12,8 +12,8 @@ def create_world():
 
     running = True
 
-    stone_1 = blue_stone(100, 400, 30, 0)
-    stone_2 = blue_stone(400, 100, 1, 30)
+    stone_1 = blue_stone(100, 400, 30, -30)
+    stone_2 = blue_stone(400, 100, 5, 30)
 
     game_world.add_object(stone_1, 0)
     game_world.add_object(stone_2, 0)

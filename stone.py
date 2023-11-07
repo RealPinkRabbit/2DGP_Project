@@ -31,6 +31,7 @@ def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
 
 # 두 점의 좌표와 방향을 알 때, 두 직선의 교점을 구하는 메서드
 # 단, 기울기가 같은 입력은 받지 않도록 함 !!!!!! 해당부분 수정 필요
+# 멈춰있는 물체와 충돌 발생시에도 오류 발생
 # round() 메서드로 약간 깎아냄
 def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
     aux, auy = get_unit_vector_xy(avx, avy)
@@ -42,12 +43,12 @@ def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
         if (round(avx,4) == 0.0000): # a의 운동이 y축과 평행하면
             om = ovy/ovx
             cx = ay
-            cy = om(ay - ox) + oy
+            cy = om * (ay - ox) + oy
             return cx, cy
         elif (round(ovx,4) == 0.0000): # o의 운동이 y축과 평행하면
             am = avy/avx
             cx = oy
-            cy = am(oy - ax) + ay
+            cy = am * (oy - ax) + ay
             return cx, cy
         else: # 두 운동 모두 y축과 평행하지 않으면
             am = avy/avx
