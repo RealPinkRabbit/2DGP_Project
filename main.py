@@ -13,7 +13,7 @@ def create_world():
     running = True
 
     stone_1 = blue_stone()
-    stone_2 = blue_stone(164, 164)
+    stone_2 = blue_stone(148, 148)
 
     game_world.add_object(stone_1, 0)
     game_world.add_object(stone_2, 0)
@@ -32,7 +32,8 @@ def handle_events():
 
 def update_world():
     game_world.update_object()
-    pass
+    if game_world.collide(stone_1, stone_2):
+        print('baam')
 
 def render_world():
     clear_canvas()

@@ -27,6 +27,6 @@ def collide(a, b):
     a_x, a_y, a_rad = a.get_bc()
     b_x, b_y, b_rad = b.get_bc()
 
-    if (pow(a_x-b_x)+pow(a_y-b_y) > a_rad+b_rad):
+    if (pow(a_x-b_x,2)+pow(a_y-b_y,2) > pow(a_rad+b_rad,2)):
         return False
     return True
