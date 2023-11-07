@@ -1,8 +1,10 @@
 from pico2d import *
 from math import fabs, pow, sqrt, acos
 
+import game_world
 
-# 해당 벡터의 단위벡터를 반환하는 메서드
+
+# 해당 스톤 운동벡터의 단위벡터를 반환하는 메서드
 def get_unit_vector_xy(vx, vy):
     div = sqrt(pow(vx, 2) + pow(vy, 2))
     if div == 0:
@@ -12,9 +14,10 @@ def get_unit_vector_xy(vx, vy):
 # 스톤 o에 대하여 스톤 a의 상대적인 벡터(충돌지점)를 반환하는 메서드
 def get_relative_collision_xy(avx, avy, ovx, ovy):
     rvx, rvy = ovx-avx, ovy-avy
-    rvx *= -1
-    rvy *= -1
-    return blue_stone.default_radius * get_unit_vector_xy(rvx, rvy)
+    rvx *= -32
+    rvy *= -32
+    vx, vy = get_unit_vector_xy(rvx, rvy)
+    return vx, vy
 
 # 두 스톤의 충돌지점의 좌표를 구하는 메서드
 def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
@@ -32,7 +35,7 @@ def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
 def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
     aux, auy = get_unit_vector_xy(avx, avy)
     oux, ouy = get_unit_vector_xy(ovx, ovy)
-    if (round(abs(aux), 4) == round(abs(oux), 4) & aux * oux >= 0):
+    if (round(abs(aux), 4) == round(abs(oux), 4) and aux * oux >= 0.0 and auy * ouy >= 0.0):
         print("get_cross_xy exception occured")
         return None, None
     else: # 기울기가 다르면
@@ -68,9 +71,9 @@ class blue_stone:
     vDecRate = 0.98
     default_radius = 32
 
-    def __init__(self, x = 100, y = 100):
+    def __init__(self, x = 100, y = 100, vx = 30, vy = 30):
         self.x, self.y = x, y
-        self.vx, self.vy = 30, 30
+        self.vx, self.vy = vx, vy
         self.radius = blue_stone.default_radius
         if (blue_stone.image == None):
             blue_stone.image = load_image('Stone_Blue_64x64.png')
@@ -111,8 +114,12 @@ class blue_stone:
         return self.x, self.y, self.radius
 
     def handle_collision(self, group, oppo):
+        global stone
         if group == 'stone:stone':
             ############################################
+            cx, cy = get_collision_xy(self.x, self.y, self.vx, self.vy, oppo.x, oppo.y, oppo.vx, oppo.vy)
+            stone = blue_stone(cx, cy, 0, 0)
+            game_world.add_object(stone, 0)
             ############################################
             pass
 
