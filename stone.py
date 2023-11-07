@@ -1,7 +1,18 @@
 from pico2d import *
 from math import fabs, pow, sqrt, acos
 
-import game_world
+
+# 해당 벡터의 크기가 1인 벡터를 반환하는 메서드
+def get_unit_vector_xy(vx, vy):
+    div = sqrt(pow(vx, 2) + pow(vy, 2))
+    return vx / div, vy / div
+
+# o에 대해 상대적인 a의 벡터(충돌지점)을 반환하는 메서드
+def get_relative_collision_xy(avx, avy, ovx, ovy):
+    rvx, rvy = ovx-avx, ovy-avy
+    rvx *= -1
+    rvy *= -1
+    return get_unit_vector_xy(rvx, rvy)
 
 # 추후 조정
 x_min_boundary = 0
@@ -60,17 +71,9 @@ class blue_stone:
 
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
+            ############################################
+            ############################################
             pass
-
-    @staticmethod
-    def get_unit_vector_x(vx, vy):
-        div = sqrt(pow(vx, 2)+pow(vy, 2))
-        return vx/div
-
-    @staticmethod
-    def get_unit_vector_y(vx, vy):
-        div = sqrt(pow(vx, 2)+pow(vy, 2))
-        return vy/div
 
     def get_power(self):
         return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
@@ -78,9 +81,3 @@ class blue_stone:
     def get_radian(self):
         return acos(self.vx/self.get_power())
 
-    @staticmethod
-    def get_relative_collision_xy(avx, avy, ovx, ovy):
-        rvx, rvy = ovx-avx, ovy-avy
-        rvx *= -1
-        rvy *= -1
-        return 32 * rvx, 32 * rvy
