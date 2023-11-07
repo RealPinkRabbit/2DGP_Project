@@ -9,7 +9,7 @@ def get_unit_vector_xy(vx, vy):
     div = sqrt(pow(vx, 2) + pow(vy, 2))
     if div == 0:
         return 0, 0
-    return vx / div, vy / div
+    return vx/div, vy/div
 
 # 스톤 o에 대하여 스톤 a의 상대적인 벡터(충돌지점)를 반환하는 메서드
 def get_relative_collision_xy(avx, avy, ovx, ovy):
@@ -30,12 +30,12 @@ def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
     return cx, cy
 
 # 두 점의 좌표와 방향을 알 때, 두 직선의 교점을 구하는 메서드
-# 단, 기울기가 같은 입력은 받지 않도록 함
+# 단, 기울기가 같은 입력은 받지 않도록 함 !!!!!! 해당부분 수정 필요
 # round() 메서드로 약간 깎아냄
 def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
     aux, auy = get_unit_vector_xy(avx, avy)
     oux, ouy = get_unit_vector_xy(ovx, ovy)
-    if (round(abs(aux), 4) == round(abs(oux), 4) and aux * oux >= 0.0 and auy * ouy >= 0.0):
+    if (round(fabs(aux), 4) == round(fabs(oux), 4) and aux * oux > 0.0 and auy * ouy > 0.0):
         print("get_cross_xy exception occured")
         return None, None
     else: # 기울기가 다르면
@@ -71,7 +71,7 @@ class blue_stone:
     vDecRate = 0.98
     default_radius = 32
 
-    def __init__(self, x = 100, y = 100, vx = 30, vy = 30):
+    def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
         self.vx, self.vy = vx, vy
         self.radius = blue_stone.default_radius
