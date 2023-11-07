@@ -17,6 +17,8 @@ def create_world():
 
     game_world.add_object(stone_1, 0)
     game_world.add_object(stone_2, 0)
+
+    game_world.add_collision_pair('stone:stone', stone_1, stone_2)
     pass
 
 def handle_events():
@@ -32,8 +34,7 @@ def handle_events():
 
 def update_world():
     game_world.update_object()
-    if game_world.collide(stone_1, stone_2):
-        print('baam')
+    game_world.handle_collisions()
 
 def render_world():
     clear_canvas()
