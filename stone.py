@@ -52,3 +52,6 @@ class blue_stone:
         elif (self.y > y_max_boundary - self.radius):
             self.y -= 2*(self.y - (y_max_boundary - self.radius))
             self.vy *= -1
+
+    def get_bc(self):
+        return self.x, self.y, self.radius
