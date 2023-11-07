@@ -56,7 +56,9 @@ class blue_stone:
     def get_bc(self):
         return self.x, self.y, self.radius
 
-    def handle_collision(self, group, other):
+    def handle_collision(self, group, oppo):
         if group == 'stone:stone':
+            self.x, self.y, self.vx, self.vy = 100, 100, 0, 0
+            oppo.x, oppo.y, oppo.vx, oppo.vy = 100, 200, 0, 0
             print("baaam")
             pass
