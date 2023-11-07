@@ -2,15 +2,26 @@
 # update()함수, draw()함수를 꼭 가져야 함
 from math import pow
 
-objects = [ [] for _ in range(10) ]
+objects = [ [] for _ in range(10) ] # 시각 월드
+collision_pairs = {} # 충돌 월드
 
 def add_object(o, depth = 0):
     objects[depth].append(o)
+
+
+def remove_collision_object(o):
+    for pairs in collision_pairs.values():
+        if o in pairs[0]:
+            pairs[0].remove(o)
+        if o in pairs[1]:
+            pairs[1].remove(o)
+
 
 def remove_object(o):
     for layer in objects:
         if o in layer:
             layer.remove(o)
+            remove_collision_object(o)
             return
     raise ValueError('Cannont delete non existing object')
 
@@ -30,3 +41,12 @@ def collide(a, b):
     if (pow(a_x-b_x,2)+pow(a_y-b_y,2) > pow(a_rad+b_rad,2)):
         return False
     return True
+
+def add_collision_pair(group, a, b):
+    if group not in collision_pairs:
+        print(f'Added new group {group}')
+        collision_pairs[group] = [ [], [] ]
+    if a:
+        collision_pairs[group][0].append(a)
+    if b:
+        collision_pairs[group][1].append(b)
