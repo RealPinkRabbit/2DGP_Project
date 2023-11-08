@@ -17,8 +17,8 @@ def get_relative_collision_xy(avx, avy, ovx, ovy):
     rvx *= -1
     rvy *= -1
     vx, vy = get_unit_vector_xy(rvx, rvy)
-    vx *= 32
-    vy *= 32
+    vx *= blue_stone.default_radius
+    vy *= blue_stone.default_radius
     return vx, vy
 
 # 두 스톤의 충돌지점의 좌표를 구하는 메서드
@@ -33,6 +33,7 @@ def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
 
 # 두 점의 좌표와 방향을 알 때, 두 직선의 교점을 구하는 메서드
 # 단, 기울기가 같은 입력은 받지 않도록 함 !!!!!! 해당부분 수정 필요
+# 아니, 받도록 하되 예외처리를 내부에서 모두 해결
 # 멈춰있는 물체와 충돌 발생시에도 오류 발생
 # round() 메서드로 약간 깎아냄
 def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
@@ -87,6 +88,7 @@ class blue_stone:
     def update(self):
         self.x += self.vx
         self.y += self.vy
+        print(self.vx + self.vy)
 
         self.stone_wall_collision()
 
@@ -95,7 +97,7 @@ class blue_stone:
             self.vx = 0
 
         self.vy *= blue_stone.vDecRate
-        if (fabs(self.vx) < blue_stone.minV):
+        if (fabs(self.vy) < blue_stone.minV):
             self.vy = 0
 
     def stone_wall_collision(self):
@@ -120,9 +122,9 @@ class blue_stone:
         global stone
         if group == 'stone:stone':
             ############################################
-            cx, cy = get_collision_xy(self.x, self.y, self.vx, self.vy, oppo.x, oppo.y, oppo.vx, oppo.vy)
-            stone = blue_stone(cx, cy, 0, 0)
-            game_world.add_object(stone, 0)
+            # cx, cy = get_collision_xy(self.x, self.y, self.vx, self.vy, oppo.x, oppo.y, oppo.vx, oppo.vy)
+            # stone = blue_stone(cx, cy, 0, 0)
+            # game_world.add_object(stone, 0)
             ############################################
             pass
 
