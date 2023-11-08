@@ -14,9 +14,11 @@ def get_unit_vector_xy(vx, vy):
 # 스톤 o에 대하여 스톤 a의 상대적인 벡터(충돌지점)를 반환하는 메서드
 def get_relative_collision_xy(avx, avy, ovx, ovy):
     rvx, rvy = ovx-avx, ovy-avy
-    rvx *= -32
-    rvy *= -32
+    rvx *= -1
+    rvy *= -1
     vx, vy = get_unit_vector_xy(rvx, rvy)
+    vx *= 32
+    vy *= 32
     return vx, vy
 
 # 두 스톤의 충돌지점의 좌표를 구하는 메서드
