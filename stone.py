@@ -39,19 +39,21 @@ def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
 def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
     aux, auy = get_unit_vector_xy(avx, avy)
     oux, ouy = get_unit_vector_xy(ovx, ovy)
-    if (round(fabs(aux), 4) == round(fabs(oux), 4) and aux * oux > 0.0 and auy * ouy > 0.0):
-        print("get_cross_xy exception occured")
-        return None, None
+    # if (round(fabs(aux), 4) == round(fabs(oux), 4) and aux * oux > 0.0 and auy * ouy > 0.0):
+    #     print("get_cross_xy exception occured")
+    #     return None, None
+    if ():
+        pass
     else: # 기울기가 다르면
         if (round(avx,4) == 0.0000): # a의 운동이 y축과 평행하면
             om = ovy/ovx
-            cx = ay
-            cy = om * (ay - ox) + oy
+            cx = ax
+            cy = om * (ax - ox) + oy
             return cx, cy
         elif (round(ovx,4) == 0.0000): # o의 운동이 y축과 평행하면
             am = avy/avx
-            cx = oy
-            cy = am * (oy - ax) + ay
+            cx = ox
+            cy = am * (ox - ax) + ay
             return cx, cy
         else: # 두 운동 모두 y축과 평행하지 않으면
             am = avy/avx
@@ -122,9 +124,9 @@ class blue_stone:
         global stone
         if group == 'stone:stone':
             ############################################
-            # cx, cy = get_collision_xy(self.x, self.y, self.vx, self.vy, oppo.x, oppo.y, oppo.vx, oppo.vy)
-            # stone = blue_stone(cx, cy, 0, 0)
-            # game_world.add_object(stone, 0)
+            cx, cy = get_collision_xy(self.x, self.y, self.vx, self.vy, oppo.x, oppo.y, oppo.vx, oppo.vy)
+            stone = blue_stone(cx, cy, 0, 0)
+            game_world.add_object(stone, 0)
             ############################################
             pass
 
