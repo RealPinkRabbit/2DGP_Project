@@ -5,6 +5,8 @@ import game_world
 
 
 # 해당 스톤 운동벡터의 단위벡터를 반환하는 메서드
+# 조금이라도 움직임이 있으면 해당 방향으로의 단위벡터 반환,
+# 멈춰있으면 0, 0 반환
 def get_unit_vector_xy(vx, vy):
     div = sqrt(pow(vx, 2) + pow(vy, 2))
     if div == 0:
@@ -12,6 +14,9 @@ def get_unit_vector_xy(vx, vy):
     return vx/div, vy/div
 
 # 스톤 o에 대하여 스톤 a의 상대적인 벡터(충돌지점)를 반환하는 메서드
+# 두 스톤 모두 멈춰있는 경우는 논외
+# 한쪽이라도 운동이 있으면 언제나 크기가 default_radius인 벡터 반환
+# 경우에 따라 vx 또는 vy 둘 중 하나는 값이 0이 나올 수 있음.
 def get_relative_collision_xy(avx, avy, ovx, ovy):
     rvx, rvy = ovx-avx, ovy-avy
     rvx *= -1
@@ -23,8 +28,18 @@ def get_relative_collision_xy(avx, avy, ovx, ovy):
 
 # 두 스톤의 충돌지점의 좌표를 구하는 메서드
 def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
+
     a_relative_vx, a_relative_vy = get_relative_collision_xy(avx, avy, ovx, ovy)
     o_relative_vx, o_relative_vy = -a_relative_vx, -a_relative_vy
+
+    if ((avx == avy == 0) or (ovx == ovy == 0)):  # 한 쪽 스톤이 멈춰있는 경우
+        if (avx == avy == 0):
+            return ax + a_relative_vx, ay + a_relative_vy
+        else:
+            return ox + o_relative_vx, oy + o_relative_vy
+
+    if (round(fabs(avx), 2) == round(fabs(ovx), 2) and avx * ovx <= 0): # 두 스톤 운동의 기울기가 같은 경우
+        pass
 
     moved_ax, moved_ay = ax + a_relative_vx, ay + a_relative_vy
     moved_ox, moved_oy = ox + o_relative_vx, oy + o_relative_vy
@@ -32,35 +47,25 @@ def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
     return cx, cy
 
 # 두 점의 좌표와 방향을 알 때, 두 직선의 교점을 구하는 메서드
-# 단, 기울기가 같은 입력은 받지 않도록 함 !!!!!! 해당부분 수정 필요
-# 아니, 받도록 하되 예외처리를 내부에서 모두 해결
-# 멈춰있는 물체와 충돌 발생시에도 오류 발생
-# round() 메서드로 약간 깎아냄
+# 단, 기울기가 같은 입력은 받지 않도록 함
 def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
-    aux, auy = get_unit_vector_xy(avx, avy)
-    oux, ouy = get_unit_vector_xy(ovx, ovy)
-    # if (round(fabs(aux), 4) == round(fabs(oux), 4) and aux * oux > 0.0 and auy * ouy > 0.0):
-    #     print("get_cross_xy exception occured")
-    #     return None, None
-    if ():
-        pass
-    else: # 기울기가 다르면
-        if (round(avx,4) == 0.0000): # a의 운동이 y축과 평행하면
-            om = ovy/ovx
-            cx = ax
-            cy = om * (ax - ox) + oy
-            return cx, cy
-        elif (round(ovx,4) == 0.0000): # o의 운동이 y축과 평행하면
-            am = avy/avx
-            cx = ox
-            cy = am * (ox - ax) + ay
-            return cx, cy
-        else: # 두 운동 모두 y축과 평행하지 않으면
-            am = avy/avx
-            om = ovy/ovx
-            cx = (ax * am - ay - ox * om + oy) / (am - om)
-            cy = am * (cx - ax) + ay
-            return cx, cy
+
+    if (round(avx,4) == 0.0000): # a의 운동이 y축과 평행하면
+        om = ovy/ovx
+        cx = ax
+        cy = om * (ax - ox) + oy
+        return cx, cy
+    elif (round(ovx,4) == 0.0000): # o의 운동이 y축과 평행하면
+        am = avy/avx
+        cx = ox
+        cy = am * (ox - ax) + ay
+        return cx, cy
+    else: # 두 운동 모두 y축과 평행하지 않으면
+        am = avy/avx
+        om = ovy/ovx
+        cx = (ax * am - ay - ox * om + oy) / (am - om)
+        cy = am * (cx - ax) + ay
+        return cx, cy
 
 
 # 추후 조정
@@ -90,7 +95,6 @@ class blue_stone:
     def update(self):
         self.x += self.vx
         self.y += self.vy
-        print(self.vx + self.vy)
 
         self.stone_wall_collision()
 
