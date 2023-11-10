@@ -1,5 +1,5 @@
 from pico2d import *
-from math import fabs, pow, sqrt, acos
+from math import *
 
 import game_world
 
@@ -97,6 +97,7 @@ class blue_stone:
 
     def draw(self):
         self.image.draw(self.x, self.y)
+        print(degrees(self.get_radian()))
 
     def update(self):
         self.x += self.vx
@@ -144,5 +145,10 @@ class blue_stone:
         return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
 
     def get_radian(self):
-        return acos(self.vx/self.get_power())
 
+        mx, mv = get_unit_vector_xy(self.vx, self.vy)
+        if self.vy >= 0:
+            rad = acos(mx)
+        else:
+            rad = pi + acos(-mx)
+        return rad
