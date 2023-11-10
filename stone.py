@@ -28,8 +28,28 @@ def get_relative_collision_xy(avx, avy, ovx, ovy):
 
 # 두 스톤의 충돌지점의 좌표를 구하는 메서드
 def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
-
     return (ax + ox) / 2, (ay + oy) / 2
+
+def normalize_e1(ax, ay, ox, oy):
+    return get_unit_vector_xy(ox-ax, oy-ay)
+
+def normalize_e2(ax, ay, ox, oy):
+    mx, my = get_unit_vector_xy(ox-ax, oy-ay)
+    r, theta = coor_to_polcoor(mx, my)
+    theta += pi/2
+    mx, my = polcoor_to_coor(r, theta)
+    return mx, my
+
+def coor_to_polcoor(x, y):
+    r = sqrt(pow(x, 2) + pow(y, x))
+    theta = atan(y/x)
+    return r, theta
+
+def polcoor_to_coor(r, theta):
+    x = r * cos(theta)
+    y = r * sin(theta)
+    return x, y
+
 
     # 이 아래는 정교하게 구현하려다 실패한 코드임.
 
@@ -97,7 +117,6 @@ class blue_stone:
 
     def draw(self):
         self.image.draw(self.x, self.y)
-        print(degrees(self.get_radian()))
 
     def update(self):
         self.x += self.vx
@@ -132,20 +151,13 @@ class blue_stone:
         return self.x, self.y, self.radius
 
     def handle_collision(self, group, oppo):
-        global stone
         if group == 'stone:stone':
-            ############################################
-            cx, cy = get_collision_xy(self.x, self.y, self.vx, self.vy, oppo.x, oppo.y, oppo.vx, oppo.vy)
-            stone = blue_stone(cx, cy, 0, 0)
-            game_world.add_object(stone, 0)
-            ############################################
             pass
 
     def get_power(self):
         return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
 
     def get_radian(self):
-
         mx, mv = get_unit_vector_xy(self.vx, self.vy)
         if self.vy >= 0:
             rad = acos(mx)
