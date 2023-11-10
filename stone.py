@@ -90,6 +90,7 @@ class blue_stone:
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
         self.vx, self.vy = vx, vy
+        self.m = 100
         self.radius = blue_stone.default_radius
         if (blue_stone.image == None):
             blue_stone.image = load_image('Stone_Blue_64x64.png')
@@ -143,3 +144,6 @@ class blue_stone:
         else:
             rad = pi + acos(-mx)
         return rad
+
+    def get_vxvy_after_collision(self):
+
