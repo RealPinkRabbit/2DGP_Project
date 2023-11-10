@@ -56,16 +56,17 @@ def get_internal_product(avx, avy, ovx, ovy):
 def get_collision_coefficient(avx, avy, ovx, ovy, evx, evy):
     t1 = get_internal_product(avx, avy, evx, evy)
     t2 = get_internal_product(ovx, ovy, evx, evy)
-    return t1 / t2
+    return t1 / t2, t1, t2
     pass
 
-def get_radian(self):
-    mx, mv = get_unit_vector_xy(self.vx, self.vy)
-    if self.vy >= 0:
+def get_radian(vx, vy):
+    mx, mv = get_unit_vector_xy(vx, vy)
+    if vy >= 0:
         rad = acos(mx)
     else:
         rad = pi + acos(-mx)
     return rad
+
 
 # 두 점의 좌표와 방향을 알 때, 두 직선의 교점을 구하는 메서드
 # 단, 기울기가 같은 입력은 받지 않도록 함
@@ -164,8 +165,8 @@ class blue_stone:
     def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy, oppo_rad):
         lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
         lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
-        temp = get_collision_coefficient(self.vx, self.vy, oppo_vx, oppo_vy, lxx, lxy)
-
-        self.vx = ((self.m - temp * oppo_m) * self.vx * cos(self.get_local_radian()) + oppo_m * (1+temp) * oppo_vx * cos(oppo_rad) / (self.m + oppo_m)) * lxx - self.vx * sin(self.get_local_radian()) * lyx
-        self.vy = ((self.m - temp * oppo_m) * self.vy * cos(self.get_local_radian()) + oppo_m * (1+temp) * oppo_vy * cos(oppo_rad) / (self.m + oppo_m)) * lxy - self.vx * sin(self.get_local_radian()) * lyy
+        ltheta = get_radian(lxx, lxy)
+        colcoef, check_t1, check_t2 = get_collision_coefficient(self.vx, self.vy, oppo_vx, oppo_vy, lxx, lxy)
+        self.vx = (((self.m - colcoef * oppo_m) * self.vx * cos(self.get_local_radian()+ltheta) + oppo_m * (1+colcoef) * oppo_vx * cos(oppo_rad) * lxx) / (self.m + oppo_m)) - self.vx * sin(self.get_local_radian()+ltheta) * lyx
+        self.vy = (((self.m - colcoef * oppo_m) * self.vy * cos(self.get_local_radian()+ltheta) + oppo_m * (1+colcoef) * oppo_vy * cos(oppo_rad) * lxy) / (self.m + oppo_m)) - self.vx * sin(self.get_local_radian()+ltheta) * lyy
         pass

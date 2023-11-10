@@ -13,7 +13,7 @@ def create_world():
     running = True
 
     stone_2 = blue_stone(700, 100, -20, 20)
-    stone_1 = blue_stone(100, 110, 20, 20)
+    stone_1 = blue_stone(100, 100, 20, 20)
 
     game_world.add_object(stone_1, 0)
     game_world.add_object(stone_2, 0)
