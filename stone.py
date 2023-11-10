@@ -30,10 +30,10 @@ def get_relative_collision_xy(avx, avy, ovx, ovy):
 def get_collision_xy(ax, ay, ox, oy):
     return (ax + ox) / 2, (ay + oy) / 2
 
-def normalize_e1(ax, ay, ox, oy):
+def get_local_x(ax, ay, ox, oy):
     return get_unit_vector_xy(ox-ax, oy-ay)
 
-def normalize_e2(ax, ay, ox, oy):
+def get_local_y(ax, ay, ox, oy):
     mx, my = get_unit_vector_xy(ox-ax, oy-ay)
     r, theta = coor_to_polcoor(mx, my)
     theta += pi/2
@@ -49,6 +49,11 @@ def polcoor_to_coor(r, theta):
     x = r * cos(theta)
     y = r * sin(theta)
     return x, y
+
+def get_internal_product(avx, avy, ovx, ovy):
+    return avx*ovx, avy*ovy
+
+
 
 
 # 두 점의 좌표와 방향을 알 때, 두 직선의 교점을 구하는 메서드
@@ -146,4 +151,4 @@ class blue_stone:
         return rad
 
     def get_vxvy_after_collision(self):
-
+        pass
