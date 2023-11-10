@@ -17,18 +17,18 @@ def get_unit_vector_xy(vx, vy):
 # 두 스톤 모두 멈춰있는 경우는 논외
 # 한쪽이라도 운동이 있으면 언제나 크기가 default_radius인 벡터 반환
 # 경우에 따라 vx 또는 vy 둘 중 하나는 값이 0이 나올 수 있음.
-def get_relative_collision_xy(avx, avy, ovx, ovy):
-    rvx, rvy = ovx-avx, ovy-avy
-    rvx *= -1
-    rvy *= -1
-    vx, vy = get_unit_vector_xy(rvx, rvy)
-    vx *= blue_stone.default_radius
-    vy *= blue_stone.default_radius
-    return vx, vy
+# def get_relative_collision_xy(avx, avy, ovx, ovy):
+#     rvx, rvy = ovx-avx, ovy-avy
+#     rvx *= -1
+#     rvy *= -1
+#     vx, vy = get_unit_vector_xy(rvx, rvy)
+#     vx *= blue_stone.default_radius
+#     vy *= blue_stone.default_radius
+#     return vx, vy
 
-# 두 스톤의 충돌지점의 좌표를 구하는 메서드
-def get_collision_xy(ax, ay, ox, oy):
-    return (ax + ox) / 2, (ay + oy) / 2
+# # 두 스톤의 충돌지점의 좌표를 구하는 메서드
+# def get_collision_xy(ax, ay, ox, oy):
+#     return (ax + ox) / 2, (ay + oy) / 2
 
 def get_local_x(ax, ay, ox, oy):
     return get_unit_vector_xy(ox-ax, oy-ay)
@@ -41,7 +41,7 @@ def get_local_y(ax, ay, ox, oy):
     return mx, my
 
 def coor_to_polcoor(x, y):
-    r = sqrt(pow(x, 2) + pow(y, x))
+    r = sqrt(pow(x, 2) + pow(y, 2))
     theta = atan(y/x)
     return r, theta
 
@@ -51,10 +51,21 @@ def polcoor_to_coor(r, theta):
     return x, y
 
 def get_internal_product(avx, avy, ovx, ovy):
-    return avx*ovx, avy*ovy
+    return avx*ovx + avy*ovy
 
+def get_collision_coefficient(avx, avy, ovx, ovy, evx, evy):
+    t1 = get_internal_product(avx, avy, evx, evy)
+    t2 = get_internal_product(ovx, ovy, evx, evy)
+    return t1 / t2
+    pass
 
-
+def get_radian(self):
+    mx, mv = get_unit_vector_xy(self.vx, self.vy)
+    if self.vy >= 0:
+        rad = acos(mx)
+    else:
+        rad = pi + acos(-mx)
+    return rad
 
 # 두 점의 좌표와 방향을 알 때, 두 직선의 교점을 구하는 메서드
 # 단, 기울기가 같은 입력은 받지 않도록 함
@@ -137,18 +148,24 @@ class blue_stone:
 
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
-            pass
+            self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy, oppo.radius)
 
     def get_power(self):
         return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
 
-    def get_radian(self):
-        mx, mv = get_unit_vector_xy(self.vx, self.vy)
+    def get_local_radian(self):
+        mx, mv = get_unit_vector_xy(-self.vx, self.vy)
         if self.vy >= 0:
             rad = acos(mx)
         else:
             rad = pi + acos(-mx)
         return rad
 
-    def get_vxvy_after_collision(self):
+    def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy, oppo_rad):
+        lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
+        lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
+        temp = get_collision_coefficient(self.vx, self.vy, oppo_vx, oppo_vy, lxx, lxy)
+
+        self.vx = ((self.m - temp * oppo_m) * self.vx * cos(self.get_local_radian()) + oppo_m * (1+temp) * oppo_vx * cos(oppo_rad) / (self.m + oppo_m)) * lxx - self.vx * sin(self.get_local_radian()) * lyx
+        self.vy = ((self.m - temp * oppo_m) * self.vy * cos(self.get_local_radian()) + oppo_m * (1+temp) * oppo_vy * cos(oppo_rad) / (self.m + oppo_m)) * lxy - self.vx * sin(self.get_local_radian()) * lyy
         pass
