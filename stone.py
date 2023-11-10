@@ -27,7 +27,7 @@ def get_relative_collision_xy(avx, avy, ovx, ovy):
     return vx, vy
 
 # 두 스톤의 충돌지점의 좌표를 구하는 메서드
-def get_collision_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
+def get_collision_xy(ax, ay, ox, oy):
     return (ax + ox) / 2, (ay + oy) / 2
 
 def normalize_e1(ax, ay, ox, oy):
@@ -49,27 +49,6 @@ def polcoor_to_coor(r, theta):
     x = r * cos(theta)
     y = r * sin(theta)
     return x, y
-
-
-    # 이 아래는 정교하게 구현하려다 실패한 코드임.
-
-    # a_relative_vx, a_relative_vy = get_relative_collision_xy(avx, avy, ovx, ovy)
-    # o_relative_vx, o_relative_vy = -a_relative_vx, -a_relative_vy
-    #
-    # if ((avx == avy == 0) or (ovx == ovy == 0)):  # 한 쪽 스톤이 멈춰있는 경우 (100% 완료)
-    #     if (avx == avy == 0):
-    #         return ax + a_relative_vx, ay + a_relative_vy
-    #     else:
-    #         return ox + o_relative_vx, oy + o_relative_vy
-    #
-    # if (round(fabs(avx), 2) == round(fabs(ovx), 2) and avx * ovx <= 0): # 두 스톤 운동의 기울기가 같은 경우
-    #     pass
-    #
-    # # 두 스톤 운동의 기울기가 다른 경우
-    # moved_ax, moved_ay = ax + a_relative_vx, ay + a_relative_vy
-    # moved_ox, moved_oy = ox + o_relative_vx, oy + o_relative_vy
-    # cx, cy = get_cross_xy(moved_ax, moved_ay, avx, avy, moved_ox, moved_oy, ovx, ovy)
-    # return cx, cy
 
 
 # 두 점의 좌표와 방향을 알 때, 두 직선의 교점을 구하는 메서드
