@@ -169,12 +169,32 @@ class Idle:
     def enter(stone, e):
         if right_down(e):
             stone.vx += stone.get_power() / 100
+            stone.card_dx = 50
+            stone.card_dy = 0
+            stone.message = 'R'
         elif left_down(e):
             stone.vx -= stone.get_power() / 100
+            stone.card_dx = -50
+            stone.card_dy = 0
+            stone.message = 'L'
         elif up_down(e):
             stone.vy += stone.get_power() / 100
+            stone.card_dx = 0
+            stone.card_dy = 50
+            stone.message = 'U'
         elif down_down(e):
             stone.vy -= stone.get_power() / 100
+            stone.card_dx = 0
+            stone.card_dy = -50
+            stone.message = 'D'
+        elif right_up(e):
+            stone.message = ''
+        elif left_up(e):
+            stone.message = ''
+        elif up_up(e):
+            stone.message = ''
+        elif down_up(e):
+            stone.message = ''
         elif z_down(e):
             stone.vx = 100
         elif x_down(e):
@@ -259,16 +279,20 @@ class blue_stone:
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
         self.vx, self.vy = vx, vy
+        self.card_dx, self.card_dy = 0, 0
+        self.message = ''
         self.m = 100
         self.radius = blue_stone.default_radius
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.color = 'BLUE'
+        self.font = load_font('ENCR10B.TTF', 32)
         if (blue_stone.image == None):
             blue_stone.image = load_image('Stone_Blue_64x64.png')
 
     def draw(self):
         self.state_machine.draw()
+        self.font.draw(self.x + self.card_dx - 10, self.y + self.card_dy, f'{self.message}', (0, 0, 0))
 
     def update(self):
         self.state_machine.update()
@@ -377,6 +401,8 @@ class red_stone:
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
         self.vx, self.vy = vx, vy
+        self.card_dx, self.card_dy = 0, 0
+        self.message = ''
         self.m = 100
         self.radius = blue_stone.default_radius
         self.state_machine = StateMachine(self)
@@ -388,6 +414,7 @@ class red_stone:
 
     def draw(self):
         self.state_machine.draw()
+        self.font.draw(self.x + self.card_dx, self.y + self.card_dy, f'{self.message}', (0, 0, 0))
 
     def update(self):
         self.state_machine.update()
