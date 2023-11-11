@@ -153,7 +153,7 @@ class blue_stone:
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
             print("collision occured")
-            self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy, oppo.radius)
+            self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
 
     def get_power(self):
         return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
@@ -166,7 +166,7 @@ class blue_stone:
             rad = acos(-mx)
         return rad
 
-    def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy, oppo_rad):
+    def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy):
         if self.x < oppo_x:
             lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
             lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
@@ -176,7 +176,9 @@ class blue_stone:
         else:
             self.vx, oppo_vx = oppo_vx, self.vx
             return
+
         ltheta = get_radian(lxx, lxy)
+
         if self.x < oppo_x:
             check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
             check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
@@ -192,5 +194,31 @@ class blue_stone:
             if (check_t1 > 0 and fabs(check_t1) < fabs(check_t2)):
                 return
 
-        self.vx = ((oppo_m * 2 * oppo_vx * cos(ltheta - oppo_rad)) * lxx / (self.m + oppo_m)) - self.vx * sin(ltheta - get_radian(self.vx, self.vy)) * lyx
-        self.vy = ((oppo_m * 2 * oppo_vy * cos(ltheta - oppo_rad)) * lxy / (self.m + oppo_m)) - self.vy * sin(ltheta - get_radian(self.vx, self.vy)) * lyy
+        self_theta = get_radian(self.vx, self.vy)
+        oppo_theta = get_radian(oppo_vx, oppo_vy)
+
+        self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta - ltheta + pi/2)) * lxx / (self.m + oppo_m)) - self.vx * sin(self_theta - ltheta + pi/2) * lyx
+        self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta - ltheta + pi/2)) * lxy / (self.m + oppo_m)) - self.vy * sin(self_theta - ltheta + pi/2) * lyy
+
+
+
+
+# 정규화
+        # a_r, a_theta = coor_to_polcoor(self.vx, self.vy)
+        # a_theta -= ltheta
+        # tself_vx, tself_vy = polcoor_to_coor(a_r, a_theta)
+        # tself_theta = get_radian(tself_vx, tself_vy)
+
+        # o_r, o_theta = coor_to_polcoor(oppo_vx, oppo_vy)
+        # o_theta -= ltheta
+        # toppo_vx, toppo_vy = polcoor_to_coor(o_r, o_theta)
+        # toppo_theta = get_radian(toppo_vx, toppo_vy)
+
+        # tself_vx = ((oppo_m * 2 * oppo_vx * cos(-toppo_theta)) * lxx / (self.m + oppo_m)) - tself_vx * sin(-tself_theta) * lyx
+        # tself_vy = ((oppo_m * 2 * oppo_vy * cos(-toppo_theta)) * lxy / (self.m + oppo_m)) - tself_vy * sin(-tself_theta) * lyy
+
+        # a_r, a_theta = coor_to_polcoor(tself_vx, tself_vy)
+        # a_theta += ltheta
+        # self.vx, self.vy = polcoor_to_coor(a_r, a_theta)
+
+
