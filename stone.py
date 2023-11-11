@@ -3,6 +3,20 @@ from math import *
 
 import game_world
 
+def space_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
+
+def right_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
+
+def right_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
+
+def left_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
+
+def left_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
 # 해당 스톤 운동벡터의 단위벡터를 반환하는 메서드
 # 조금이라도 움직임이 있으면 해당 방향으로의 단위벡터 반환,
@@ -101,33 +115,58 @@ y_max_boundary = 800
 
 class Idle:
     @staticmethod
-    def enter():
+    def enter(stone, e):
         pass
 
     @staticmethod
-    def exit():
+    def exit(stone, e):
         pass
 
     @staticmethod
-    def do():
-        pass
+    def do(stone):
+        stone.x += stone.vx
+        stone.y += stone.vy
+
+        stone.stone_wall_collision()
+
+        stone.vx *= blue_stone.vDecRate
+        if (fabs(stone.vx) < blue_stone.minV):
+            stone.vx = 0
+
+        stone.vy *= blue_stone.vDecRate
+        if (fabs(stone.vy) < blue_stone.minV):
+            stone.vy = 0
 
     @staticmethod
-    def draw():
+    def draw(stone):
+        stone.image.draw(stone.x, stone.y)
         pass
 
 class StateMachine:
-    def __init__(self):
+    def __init__(self, stone):
+        self.stone = stone
         self.cur_state = Idle
+        self.transitions = {
+            Idle: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle}
+        }
 
     def start(self):
-        self.cur_state.enter()
+        self.cur_state.enter(self.stone, ('START', 0))
 
     def update(self):
-        self.cur_state.do()
+        self.cur_state.do(self.stone)
 
     def draw(self):
-        self.cur_state.draw()
+        self.cur_state.draw(self.stone)
+
+    def handle_event(self, e):
+        for check_event, next_state in self.transitions[self.cur_state].items():
+            if check_event(e):
+                self.cur_state.exit(self.stone, e)
+                self.cur_state = next_state
+                self.cur_state.enter(self.stone, e)
+                return True
+        return False
 
 
 class blue_stone:
@@ -142,28 +181,19 @@ class blue_stone:
         self.vx, self.vy = vx, vy
         self.m = 100
         self.radius = blue_stone.default_radius
+        self.state_machine = StateMachine(self)
+        self.state_machine.start()
         if (blue_stone.image == None):
             blue_stone.image = load_image('Stone_Blue_64x64.png')
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.state_machine.draw()
 
     def update(self):
-        self.x += self.vx
-        self.y += self.vy
-
-        self.stone_wall_collision()
-
-        self.vx *= blue_stone.vDecRate
-        if (fabs(self.vx) < blue_stone.minV):
-            self.vx = 0
-
-        self.vy *= blue_stone.vDecRate
-        if (fabs(self.vy) < blue_stone.minV):
-            self.vy = 0
+        self.state_machine.update()
 
     def handle_event(self, event):
-        pass
+        self.state_machine.handle_event(('INPUT', event))
 
     def stone_wall_collision(self):
         if (self.x < x_min_boundary + self.radius):
