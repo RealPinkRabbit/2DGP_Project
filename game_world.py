@@ -5,6 +5,7 @@ from math import pow
 objects = [ [] for _ in range(5) ] # 시각 월드
 collision_pairs = {} # 충돌 월드
 
+
 def add_object(o, depth = 0):
     objects[depth].append(o)
 

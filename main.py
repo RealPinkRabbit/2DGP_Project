@@ -1,64 +1,12 @@
-from pico2d import *
-from stone import blue_stone # red_stone
-from house import house
-import game_world
-from math import *
+import pico2d
+import play_mode
 
-canvas_width = 1280
-canvas_height = 800
-
-def create_world():
-    global running
-    global blue_stone_1, stone_2
-    # global red_stone_1
-    global house_1
-
-    running = True
-
-    blue_stone_1 = blue_stone(400, 400, 100, 0)
-    # red_stone_1 = red_stone(900, 400, 0, 0)
-    house_1 = house()
-
-    # stone_2 = blue_stone(700, 400, -20, 20)
-
-    game_world.add_object(blue_stone_1, 1)
-    # game_world.add_object(red_stone_1, 1)
-    game_world.add_object(house_1, 0)
-    # game_world.add_object(stone_2, 0)
-
-    # game_world.add_collision_pair('house:stone', house_1, blue_stone_1)
-    # game_world.add_collision_pair('house:stone', house_1, red_stone_1)
-    # game_world.add_collision_pair('stone:stone', stone_1, stone_2)
-    pass
-
-def handle_events():
-    global running
-
-    events = get_events()
-    for event in events:
-        if event.type == SDL_QUIT:
-            running = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
-        else:
-            blue_stone_1.handle_event(event)
-    pass
-
-def update_world():
-    game_world.update_object()
-    game_world.handle_collisions()
-
-def render_world():
-    clear_canvas()
-    game_world.render_object()
-    update_canvas()
-    pass
-
-open_canvas(canvas_width, canvas_height)
-create_world()
-while running:
-    handle_events()
-    update_world()
-    render_world()
-    delay(0.01)
-close_canvas()
+pico2d.open_canvas(play_mode.canvas_width, play_mode.canvas_height)
+play_mode.init()
+while play_mode.running:
+    play_mode.handle_events()
+    play_mode.update()
+    play_mode.draw()
+    pico2d.delay(0.01)
+play_mode.finish()
+pico2d.close_canvas()

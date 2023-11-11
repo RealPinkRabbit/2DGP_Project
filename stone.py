@@ -6,6 +6,21 @@ import game_world
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
+def space_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_SPACE
+
+def z_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_z
+
+def z_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_z
+
+def x_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_x
+
+def x_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_x
+
 def up_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
 
@@ -136,6 +151,10 @@ class Idle:
             stone.vy += stone.get_power() / 100
         if down_down(e):
             stone.vy -= stone.get_power() / 100
+        if z_down(e):
+            stone.vx = 100
+        if x_down(e):
+            stone.vy = 100
         pass
 
     @staticmethod
@@ -168,7 +187,9 @@ class StateMachine:
         self.cur_state = Idle
         self.transitions = {
             Idle: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle,
-                   up_down: Idle, down_down: Idle, up_up: Idle, down_up: Idle}
+                   up_down: Idle, down_down: Idle, up_up: Idle, down_up: Idle,
+                   space_down: Idle, space_up: Idle, z_down: Idle, z_up: Idle,
+                   x_down: Idle, x_up: Idle}
         }
 
     def start(self):
