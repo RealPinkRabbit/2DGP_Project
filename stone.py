@@ -42,7 +42,15 @@ def get_local_y(ax, ay, ox, oy):
 
 def coor_to_polcoor(x, y):
     r = sqrt(pow(x, 2) + pow(y, 2))
-    theta = atan(y/x)
+    if round(fabs(x), 4) == 0.0000:
+        if x*y > 0:
+            theta = atan(inf)
+        elif x*y < 0:
+            theta = atan(-inf)
+        else:
+            theta = 0
+    else:
+        theta = atan(y/x)
     return r, theta
 
 def polcoor_to_coor(r, theta):
@@ -53,11 +61,6 @@ def polcoor_to_coor(r, theta):
 def get_internal_product(avx, avy, ovx, ovy):
     return avx*ovx + avy*ovy
 
-def get_collision_coefficient(avx, avy, ovx, ovy, evx, evy):
-    t1 = get_internal_product(avx, avy, evx, evy)
-    t2 = get_internal_product(ovx, ovy, evx, evy)
-    return t1 / t2, t1, t2
-    pass
 
 def get_radian(vx, vy):
     mx, mv = get_unit_vector_xy(vx, vy)
@@ -149,24 +152,38 @@ class blue_stone:
 
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
+            print("collision occured")
             self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy, oppo.radius)
 
     def get_power(self):
         return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
 
     def get_local_radian(self):
-        mx, mv = get_unit_vector_xy(-self.vx, self.vy)
+        mx, mv = get_unit_vector_xy(self.vx, self.vy)
         if self.vy >= 0:
-            rad = acos(mx)
+            rad = acos(mx) + pi
         else:
-            rad = pi + acos(-mx)
+            rad = acos(-mx)
         return rad
 
     def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy, oppo_rad):
-        lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
-        lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
+        if self.x < oppo_x:
+            lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
+            lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
+        elif self.x > oppo_x:
+            lxx, lxy = get_local_x(oppo_x, oppo_y, self.x, self.y)
+            lyx, lyy = get_local_y(oppo_x, oppo_y, self.x, self.y)
         ltheta = get_radian(lxx, lxy)
-        colcoef, check_t1, check_t2 = get_collision_coefficient(self.vx, self.vy, oppo_vx, oppo_vy, lxx, lxy)
-        self.vx = (((self.m - colcoef * oppo_m) * self.vx * cos(self.get_local_radian()+ltheta) + oppo_m * (1+colcoef) * oppo_vx * cos(oppo_rad) * lxx) / (self.m + oppo_m)) - self.vx * sin(self.get_local_radian()+ltheta) * lyx
-        self.vy = (((self.m - colcoef * oppo_m) * self.vy * cos(self.get_local_radian()+ltheta) + oppo_m * (1+colcoef) * oppo_vy * cos(oppo_rad) * lxy) / (self.m + oppo_m)) - self.vx * sin(self.get_local_radian()+ltheta) * lyy
-        pass
+        check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
+        check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
+
+        if (check_t1 <= 0 and check_t2 >= 0):
+            return
+        if (check_t1 * check_t2 > 0):
+            if (check_t1 < 0 and fabs(check_t1) > fabs(check_t2)):
+                return
+            if (check_t1 > 0 and fabs(check_t1) < fabs(check_t2)):
+                return
+
+        self.vx = ((oppo_m * 2 * oppo_vx * cos(ltheta - oppo_rad)) * lxx / (self.m + oppo_m)) - self.vx * sin(ltheta - get_radian(self.vx, self.vy)) * lyx
+        self.vy = ((oppo_m * 2 * oppo_vy * cos(ltheta - oppo_rad)) * lxy / (self.m + oppo_m)) - self.vy * sin(ltheta - get_radian(self.vx, self.vy)) * lyy
