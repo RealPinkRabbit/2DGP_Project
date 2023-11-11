@@ -21,6 +21,30 @@ def x_down(e):
 def x_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_x
 
+def w_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
+
+def w_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_w
+
+def a_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
+
+def a_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+
+def s_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
+
+def s_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
+
+def d_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
+
+def d_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
+
 def up_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
 
@@ -145,16 +169,24 @@ class Idle:
     def enter(stone, e):
         if right_down(e):
             stone.vx += stone.get_power() / 100
-        if left_down(e):
+        elif left_down(e):
             stone.vx -= stone.get_power() / 100
-        if up_down(e):
+        elif up_down(e):
             stone.vy += stone.get_power() / 100
-        if down_down(e):
+        elif down_down(e):
             stone.vy -= stone.get_power() / 100
-        if z_down(e):
+        elif z_down(e):
             stone.vx = 100
-        if x_down(e):
+        elif x_down(e):
             stone.vy = 100
+        elif w_down(e):
+            stone.vy = 5
+        elif a_down(e):
+            stone.vx = -5
+        elif s_down(e):
+            stone.vy = -5
+        elif d_down(e):
+            stone.vx = 5
         pass
 
     @staticmethod
@@ -187,9 +219,15 @@ class StateMachine:
         self.cur_state = Idle
         self.transitions = {
             Idle: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle,
-                   up_down: Idle, down_down: Idle, up_up: Idle, down_up: Idle,
-                   space_down: Idle, space_up: Idle, z_down: Idle, z_up: Idle,
-                   x_down: Idle, x_up: Idle}
+                   up_down: Idle, up_up: Idle,
+                   down_down: Idle, down_up: Idle,
+                   space_down: Idle, space_up: Idle,
+                   z_down: Idle, z_up: Idle,
+                   x_down: Idle, x_up: Idle,
+                   w_down: Idle, w_up: Idle,
+                   a_down: Idle, a_up: Idle,
+                   s_down: Idle, s_up: Idle,
+                   d_down: Idle, d_up: Idle}
         }
 
     def start(self):
@@ -257,7 +295,6 @@ class blue_stone:
 
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
-            print("collision occured")
             self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
         if group == 'house:stone':
             pass
@@ -304,8 +341,8 @@ class blue_stone:
         self_theta = get_radian(self.vx, self.vy)
         oppo_theta = get_radian(oppo_vx, oppo_vy)
 
-        self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta - ltheta + pi/2)) * lxx / (self.m + oppo_m)) - self.vx * sin(self_theta - ltheta + pi/2) * lyx
-        self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta - ltheta + pi/2)) * lxy / (self.m + oppo_m)) - self.vy * sin(self_theta - ltheta + pi/2) * lyy
+        self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta + ltheta)) * lxx / (self.m + oppo_m)) - self.vx * sin(self_theta + ltheta) * lyx
+        self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta + ltheta)) * lxy / (self.m + oppo_m)) - self.vy * sin(self_theta + ltheta) * lyy
 
 
 
