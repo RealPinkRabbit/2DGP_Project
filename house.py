@@ -27,7 +27,7 @@ class house:
             self.RGB = (255, 0, 0)
         elif self.stones_clone[0][0] == 'BLUE':
             self.RGB = (0, 0, 255)
-        self.font.draw(self.x - 140, self.y + 250, f'{self.score_color} : {self.score}', self.RGB)
+        self.font.draw(self.x - 170, self.y + 250, f'{self.score_color} : {self.score}', self.RGB)
 
     def update(self):
         self.stones_clone = self.stones.copy()
