@@ -11,7 +11,8 @@ def init():
 
 
 def finish():
-    pass
+    global image
+    del image
 
 def update():
     pass
