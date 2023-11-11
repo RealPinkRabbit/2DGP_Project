@@ -105,7 +105,7 @@ class blue_stone:
     image = None
     minV = 0.02
     vDecRate = 0.98
-    default_radius = 32
+    default_radius = 16
 
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
@@ -113,7 +113,7 @@ class blue_stone:
         self.m = 100
         self.radius = blue_stone.default_radius
         if (blue_stone.image == None):
-            blue_stone.image = load_image('Stone_Blue_64x64.png')
+            blue_stone.image = load_image('Stone_Blue_32x32.png')
 
     def draw(self):
         self.image.draw(self.x, self.y)
