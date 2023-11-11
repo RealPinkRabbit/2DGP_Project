@@ -461,5 +461,5 @@ class red_stone:
         self_theta = get_radian(self.vx, self.vy)
         oppo_theta = get_radian(oppo_vx, oppo_vy)
 
-        self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta + ltheta)) * lxx / (self.m + oppo_m)) - self.vx * sin(self_theta + ltheta) * lyx
-        self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta + ltheta)) * lxy / (self.m + oppo_m)) - self.vy * sin(self_theta + ltheta) * lyy
+        self.vx = ((oppo_m * 2 * oppo_vx * -cos(oppo_theta - ltheta)) * lxx / (self.m + oppo_m)) - self.vx * -sin(self_theta - ltheta) * lyx
+        self.vy = ((oppo_m * 2 * oppo_vy * -cos(oppo_theta - ltheta)) * lxy / (self.m + oppo_m)) - self.vy * -sin(self_theta - ltheta) * lyy
