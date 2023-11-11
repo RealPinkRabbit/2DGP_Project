@@ -263,6 +263,7 @@ class blue_stone:
         self.radius = blue_stone.default_radius
         self.state_machine = StateMachine(self)
         self.state_machine.start()
+        self.color = 'BLUE'
         if (blue_stone.image == None):
             blue_stone.image = load_image('Stone_Blue_64x64.png')
 
@@ -366,60 +367,99 @@ class blue_stone:
         # self.vx, self.vy = polcoor_to_coor(a_r, a_theta)
 
 
-# class red_stone:
-#
-#     image = None
-#     minV = 0.02
-#     vDecRate = 0.98
-#     default_radius = 16
-#
-#     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
-#         self.x, self.y = x, y
-#         self.vx, self.vy = vx, vy
-#         self.m = 100
-#         self.radius = red_stone.default_radius
-#         if (red_stone.image == None):
-#             red_stone.image = load_image('Stone_Red_32x32.png')
-#
-#     def draw(self):
-#         self.image.draw(self.x, self.y)
-#
-#     def update(self):
-#         self.x += self.vx
-#         self.y += self.vy
-#
-#         self.stone_wall_collision()
-#
-#         self.vx *= red_stone.vDecRate
-#         if (fabs(self.vx) < red_stone.minV):
-#             self.vx = 0
-#
-#         self.vy *= red_stone.vDecRate
-#         if (fabs(self.vy) < red_stone.minV):
-#             self.vy = 0
-#
-#     def stone_wall_collision(self):
-#         if (self.x < x_min_boundary + self.radius):
-#             self.x += 2*(self.radius - (self.x - x_min_boundary))
-#             self.vx *= -1
-#         elif (self.x > x_max_boundary - self.radius):
-#             self.x -= 2*(self.x - (x_max_boundary - self.radius))
-#             self.vx *= -1
-#
-#         if (self.y < y_min_boundary + self.radius):
-#             self.y += 2*(self.radius - (self.y - y_min_boundary))
-#             self.vy *= -1
-#         elif (self.y > y_max_boundary - self.radius):
-#             self.y -= 2*(self.y - (y_max_boundary - self.radius))
-#             self.vy *= -1
-#
-#     def get_bc(self):
-#         return self.x, self.y, self.radius
-#
-#     def handle_collision(self, group, oppo):
-#         if group == 'stone:stone':
-#             # print("collision occured")
-#             # self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
-#             pass
-#         if group == 'house:stone':
-#             pass
+class red_stone:
+
+    image = None
+    minV = 0.02
+    vDecRate = 0.98
+    default_radius = 32
+
+    def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
+        self.x, self.y = x, y
+        self.vx, self.vy = vx, vy
+        self.m = 100
+        self.radius = blue_stone.default_radius
+        self.state_machine = StateMachine(self)
+        self.state_machine.start()
+        self.color = 'RED'
+        self.font = load_font('ENCR10B.TTF', 16)
+        if (red_stone.image == None):
+            red_stone.image = load_image('Stone_Red_64x64.png')
+
+    def draw(self):
+        self.state_machine.draw()
+
+    def update(self):
+        self.state_machine.update()
+
+    def handle_event(self, event):
+        self.state_machine.handle_event(('INPUT', event))
+
+    def stone_wall_collision(self):
+        if (self.x < x_min_boundary + self.radius):
+            self.x += 2*(self.radius - (self.x - x_min_boundary))
+            self.vx *= -1
+        elif (self.x > x_max_boundary - self.radius):
+            self.x -= 2*(self.x - (x_max_boundary - self.radius))
+            self.vx *= -1
+
+        if (self.y < y_min_boundary + self.radius):
+            self.y += 2*(self.radius - (self.y - y_min_boundary))
+            self.vy *= -1
+        elif (self.y > y_max_boundary - self.radius):
+            self.y -= 2*(self.y - (y_max_boundary - self.radius))
+            self.vy *= -1
+
+    def get_bc(self):
+        return self.x, self.y, self.radius
+
+    def handle_collision(self, group, oppo):
+        if group == 'stone:stone':
+            self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
+        if group == 'house:stone':
+            pass
+
+    def get_power(self):
+        return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
+
+    def get_local_radian(self):
+        mx, mv = get_unit_vector_xy(self.vx, self.vy)
+        if self.vy >= 0:
+            rad = acos(mx) + pi
+        else:
+            rad = acos(-mx)
+        return rad
+
+    def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy):
+        if self.x < oppo_x:
+            lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
+            lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
+        elif self.x > oppo_x:
+            lxx, lxy = get_local_x(oppo_x, oppo_y, self.x, self.y)
+            lyx, lyy = get_local_y(oppo_x, oppo_y, self.x, self.y)
+        else:
+            self.vx, oppo_vx = oppo_vx, self.vx
+            return
+
+        ltheta = get_radian(lxx, lxy)
+
+        if self.x < oppo_x:
+            check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
+            check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
+        elif self.x > oppo_x:
+            check_t1 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
+            check_t2 = get_internal_product(self.vx, self.vy, lxx, lxy)
+
+        if (check_t1 <= 0 and check_t2 >= 0):
+            return
+        if (check_t1 * check_t2 > 0):
+            if (check_t1 < 0 and fabs(check_t1) > fabs(check_t2)):
+                return
+            if (check_t1 > 0 and fabs(check_t1) < fabs(check_t2)):
+                return
+
+        self_theta = get_radian(self.vx, self.vy)
+        oppo_theta = get_radian(oppo_vx, oppo_vy)
+
+        self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta + ltheta)) * lxx / (self.m + oppo_m)) - self.vx * sin(self_theta + ltheta) * lyx
+        self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta + ltheta)) * lxy / (self.m + oppo_m)) - self.vy * sin(self_theta + ltheta) * lyy

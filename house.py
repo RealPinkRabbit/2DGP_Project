@@ -11,7 +11,6 @@ class house:
 
     def draw(self):
         self.image.draw(self.x, self.y)
-
     def update(self):
         pass
 
