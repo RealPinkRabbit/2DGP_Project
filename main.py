@@ -26,6 +26,8 @@ def create_world():
     game_world.add_object(house_1, 0)
     # game_world.add_object(stone_2, 0)
 
+    game_world.add_collision_pair('house:stone', house_1, blue_stone_1)
+    game_world.add_collision_pair('house:stone', house_1, red_stone_1)
     # game_world.add_collision_pair('stone:stone', stone_1, stone_2)
     pass
 

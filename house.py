@@ -17,3 +17,7 @@ class house:
 
     def get_bc(self):
         return self.x, self.y, self.radius
+
+    def handle_collision(self, group, oppo):
+        if group == 'house:stone':
+            pass
