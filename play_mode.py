@@ -1,4 +1,7 @@
 from pico2d import *
+
+import game_framework
+import title_mode
 from stone import blue_stone # red_stone
 from house import house
 import game_world
@@ -32,17 +35,17 @@ def init():
     pass
 
 def finish():
+    game_world.clear()
     pass
 
 def handle_events():
     global running
-
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
-            running = False
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
+            game_framework.change_mode(title_mode)
         else:
             blue_stone_1.handle_event(event)
     pass
@@ -55,4 +58,10 @@ def draw():
     clear_canvas()
     game_world.render_object()
     update_canvas()
+    pass
+
+def pause():
+    pass
+
+def resume():
     pass
