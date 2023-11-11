@@ -6,6 +6,18 @@ import game_world
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
+def up_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
+
+def up_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
+
+def down_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
+
+def down_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
+
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
 
@@ -116,6 +128,14 @@ y_max_boundary = 800
 class Idle:
     @staticmethod
     def enter(stone, e):
+        if right_down(e):
+            stone.vx += 1
+        if left_down(e):
+            stone.vx -= 1
+        if up_down(e):
+            stone.vy += 1
+        if down_down(e):
+            stone.vy -= 1
         pass
 
     @staticmethod
@@ -147,7 +167,8 @@ class StateMachine:
         self.stone = stone
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle}
+            Idle: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle,
+                   up_down: Idle, down_down: Idle, up_up: Idle, down_up: Idle}
         }
 
     def start(self):
