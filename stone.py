@@ -173,9 +173,16 @@ class blue_stone:
         elif self.x > oppo_x:
             lxx, lxy = get_local_x(oppo_x, oppo_y, self.x, self.y)
             lyx, lyy = get_local_y(oppo_x, oppo_y, self.x, self.y)
+        else:
+            self.vx, oppo_vx = oppo_vx, self.vx
+            return
         ltheta = get_radian(lxx, lxy)
-        check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
-        check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
+        if self.x < oppo_x:
+            check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
+            check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
+        elif self.x > oppo_x:
+            check_t1 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
+            check_t2 = get_internal_product(self.vx, self.vy, lxx, lxy)
 
         if (check_t1 <= 0 and check_t2 >= 0):
             return
