@@ -129,13 +129,13 @@ class Idle:
     @staticmethod
     def enter(stone, e):
         if right_down(e):
-            stone.vx += 1
+            stone.vx += stone.get_power() / 100
         if left_down(e):
-            stone.vx -= 1
+            stone.vx -= stone.get_power() / 100
         if up_down(e):
-            stone.vy += 1
+            stone.vy += stone.get_power() / 100
         if down_down(e):
-            stone.vy -= 1
+            stone.vy -= stone.get_power() / 100
         pass
 
     @staticmethod

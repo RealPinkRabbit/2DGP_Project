@@ -15,7 +15,7 @@ def create_world():
 
     running = True
 
-    blue_stone_1 = blue_stone(400, 400, 100, 100)
+    blue_stone_1 = blue_stone(400, 400, 100, 0)
     # red_stone_1 = red_stone(900, 400, 0, 0)
     house_1 = house()
 
