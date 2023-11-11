@@ -154,6 +154,8 @@ class blue_stone:
         if group == 'stone:stone':
             print("collision occured")
             self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
+        if group == 'house:stone':
+            pass
 
     def get_power(self):
         return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
@@ -222,3 +224,60 @@ class blue_stone:
         # self.vx, self.vy = polcoor_to_coor(a_r, a_theta)
 
 
+class red_stone:
+
+    image = None
+    minV = 0.02
+    vDecRate = 0.98
+    default_radius = 16
+
+    def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
+        self.x, self.y = x, y
+        self.vx, self.vy = vx, vy
+        self.m = 100
+        self.radius = red_stone.default_radius
+        if (red_stone.image == None):
+            red_stone.image = load_image('Stone_Red_32x32.png')
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+    def update(self):
+        self.x += self.vx
+        self.y += self.vy
+
+        self.stone_wall_collision()
+
+        self.vx *= red_stone.vDecRate
+        if (fabs(self.vx) < red_stone.minV):
+            self.vx = 0
+
+        self.vy *= red_stone.vDecRate
+        if (fabs(self.vy) < red_stone.minV):
+            self.vy = 0
+
+    def stone_wall_collision(self):
+        if (self.x < x_min_boundary + self.radius):
+            self.x += 2*(self.radius - (self.x - x_min_boundary))
+            self.vx *= -1
+        elif (self.x > x_max_boundary - self.radius):
+            self.x -= 2*(self.x - (x_max_boundary - self.radius))
+            self.vx *= -1
+
+        if (self.y < y_min_boundary + self.radius):
+            self.y += 2*(self.radius - (self.y - y_min_boundary))
+            self.vy *= -1
+        elif (self.y > y_max_boundary - self.radius):
+            self.y -= 2*(self.y - (y_max_boundary - self.radius))
+            self.vy *= -1
+
+    def get_bc(self):
+        return self.x, self.y, self.radius
+
+    def handle_collision(self, group, oppo):
+        if group == 'stone:stone':
+            # print("collision occured")
+            # self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
+            pass
+        if group == 'house:stone':
+            pass

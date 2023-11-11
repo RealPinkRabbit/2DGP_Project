@@ -1,5 +1,6 @@
 from pico2d import *
-from stone import blue_stone
+from stone import blue_stone, red_stone
+from house import house
 import game_world
 from math import *
 
@@ -8,17 +9,24 @@ canvas_height = 800
 
 def create_world():
     global running
-    global stone_1, stone_2
+    global blue_stone_1, stone_2
+    global red_stone_1
+    global house_1
 
     running = True
 
-    stone_1 = blue_stone(100, 400, 20, 20)
-    stone_2 = blue_stone(700, 400, -20, 20)
+    blue_stone_1 = blue_stone(700, 400, 0, 0)
+    red_stone_1 = red_stone(900, 400, 0, 0)
+    house_1 = house()
 
-    game_world.add_object(stone_1, 0)
-    game_world.add_object(stone_2, 0)
+    # stone_2 = blue_stone(700, 400, -20, 20)
 
-    game_world.add_collision_pair('stone:stone', stone_1, stone_2)
+    game_world.add_object(blue_stone_1, 1)
+    game_world.add_object(red_stone_1, 1)
+    game_world.add_object(house_1, 0)
+    # game_world.add_object(stone_2, 0)
+
+    # game_world.add_collision_pair('stone:stone', stone_1, stone_2)
     pass
 
 def handle_events():
