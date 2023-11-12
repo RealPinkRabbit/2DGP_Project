@@ -45,6 +45,12 @@ def d_down(e):
 def d_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
 
+def r_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_r
+
+def r_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_r
+
 def up_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
 
@@ -207,6 +213,11 @@ class Idle:
             stone.vy = -5
         elif d_down(e):
             stone.vx = 5
+        elif r_down(e):
+            stone.x = 400
+            stone.y = 400
+            stone.vx = 0
+            stone.vy = 0
         pass
 
     @staticmethod
@@ -247,7 +258,8 @@ class StateMachine:
                    w_down: Idle, w_up: Idle,
                    a_down: Idle, a_up: Idle,
                    s_down: Idle, s_up: Idle,
-                   d_down: Idle, d_up: Idle}
+                   d_down: Idle, d_up: Idle,
+                   r_down: Idle, r_up: Idle}
         }
 
     def start(self):
