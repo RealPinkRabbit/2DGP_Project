@@ -173,7 +173,12 @@ y_max_boundary = 800 - 124
 class Idle:
     @staticmethod
     def enter(stone, e):
-        if right_down(e):
+        if space_down(e):
+            stone.x = 750
+            stone.y = 400
+            stone.vx = 0
+            stone.vy = 0
+        elif right_down(e):
             stone.vx += stone.get_power() / 100
             stone.card_dx = 50
             stone.card_dy = 0
@@ -378,8 +383,8 @@ class blue_stone:
         self_theta = get_radian(self.vx, self.vy)
         oppo_theta = get_radian(oppo_vx, oppo_vy)
 
-        self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta + ltheta)) * lxx / (self.m + oppo_m)) - self.vx * sin(self_theta + ltheta) * lyx
-        self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta + ltheta)) * lxy / (self.m + oppo_m)) - self.vy * sin(self_theta + ltheta) * lyy
+        self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta - ltheta)) * lxx / (self.m + oppo_m)) + self.vx * sin(self_theta - ltheta) * lyx
+        self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta - ltheta)) * lxy / (self.m + oppo_m)) + self.vy * sin(self_theta - ltheta) * lyy
 
 
 

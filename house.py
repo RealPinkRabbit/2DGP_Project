@@ -23,7 +23,7 @@ class house:
         self.image.draw(self.x, self.y)
         if len(self.stones_clone) == 0:
             self.RGB = (0, 0, 0)
-        elif self.stones_clone[0][0] == '--':
+        elif self.score_color == '--':
             self.RGB = (0, 0, 0)
         elif self.stones_clone[0][0] == 'RED':
             self.RGB = (255, 0, 0)
