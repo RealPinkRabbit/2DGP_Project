@@ -5,6 +5,7 @@ import title_mode
 from stone import blue_stone, red_stone
 from house import house
 import game_world
+from background import background
 from math import *
 
 canvas_width = 1280
@@ -12,6 +13,7 @@ canvas_height = 800
 
 def init():
     global running
+    global playing_background
     global blue_stone_1, blue_stone_2
     global red_stone_1
     global red_stone_2
@@ -19,20 +21,22 @@ def init():
 
     running = True
 
+    playing_background = background()
     blue_stone_1 = blue_stone(400, 400, 0, 0)
-    blue_stone_2 = blue_stone(800, 100, 0, 0)
-    red_stone_1 = red_stone(800, 600, 0, 0)
+    blue_stone_2 = blue_stone(800, 200, 0, 0)
+    red_stone_1 = red_stone(800, 550, 0, 0)
     red_stone_2 = red_stone(800, 450, 0, 0)
     house_1 = house()
 
-
-    game_world.add_object(blue_stone_1, 2)
-    game_world.add_object(blue_stone_2, 2)
-    game_world.add_object(red_stone_1, 1)
-    game_world.add_object(red_stone_2, 1)
-    game_world.add_object(house_1, 0)
+    game_world.add_object(playing_background, 0)
+    game_world.add_object(blue_stone_1, 3)
+    game_world.add_object(blue_stone_2, 3)
+    game_world.add_object(red_stone_1, 2)
+    game_world.add_object(red_stone_2, 2)
+    game_world.add_object(house_1, 1)
 
     game_world.add_collision_pair('house:stone', house_1, blue_stone_1)
+    game_world.add_collision_pair('house:stone', None, blue_stone_2)
     game_world.add_collision_pair('house:stone', None, red_stone_1)
     game_world.add_collision_pair('house:stone', None, red_stone_2)
     # game_world.add_collision_pair('house:stone', house_1, red_stone_1)

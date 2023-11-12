@@ -167,8 +167,8 @@ def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
 # 추후 조정
 x_min_boundary = 0
 x_max_boundary = 1280
-y_min_boundary = 0
-y_max_boundary = 800
+y_min_boundary = 124
+y_max_boundary = 800 - 124
 
 class Idle:
     @staticmethod
