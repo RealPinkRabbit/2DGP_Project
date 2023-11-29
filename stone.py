@@ -353,38 +353,74 @@ class blue_stone:
         return rad
 
     def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy):
-        if self.x < oppo_x:
-            lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
-            lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
-        elif self.x > oppo_x:
-            lxx, lxy = get_local_x(oppo_x, oppo_y, self.x, self.y)
-            lyx, lyy = get_local_y(oppo_x, oppo_y, self.x, self.y)
-        else:
-            self.vx, oppo_vx = oppo_vx, self.vx
-            return
 
-        ltheta = get_radian(lxx, lxy)
+        Distance = sqrt(pow(self.x - oppo_x, 2) + pow(self.y - oppo_y, 2))
 
-        if self.x < oppo_x:
-            check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
-            check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
-        elif self.x > oppo_x:
-            check_t1 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
-            check_t2 = get_internal_product(self.vx, self.vy, lxx, lxy)
+        # # 동적충돌 연산
+        # # self~oppo 방향 벡터
+        # nx = (oppo_x - self.x) / Distance
+        # ny = (oppo_y - self.y) / Distance
+        #
+        # # 충돌 방향에 대한 법선 벡터
+        # tx = -ny
+        # ty = nx
+        #
+        # # 법선 내적
+        # dpTan1 = self.vx * tx + self.vy * ty
+        # dpTan2 = oppo_vx * tx + oppo_vy * ty
+        #
+        # # 충돌방향 내적
+        # dpNorm1 = self.vx * nx + self.vy * ny
+        # dpNorm2 = oppo_vx * nx + oppo_vy * ny
+        #
+        # # 일직선 상의 모멘텀 보존
+        # m1 = (dpNorm1 * (self.m - oppo_m) + 2*oppo_m * dpNorm2) / (self.m + oppo_m)
+        # m2 = (dpNorm2 * (self.m - oppo_m) + 2*oppo_m * dpNorm1) / (self.m + oppo_m)
+        #
+        #
+        # self.vx = tx * dpTan1 + nx * m1
+        # self.vy = ty * dpTan1 + ny * m1
+        # oppo_vx = tx * dpTan2 + nx * m2
+        # oppo_vy = ty * dpTan2 + ny * m2
 
-        if (check_t1 <= 0 and check_t2 >= 0):
-            return
-        if (check_t1 * check_t2 > 0):
-            if (check_t1 < 0 and fabs(check_t1) > fabs(check_t2)):
-                return
-            if (check_t1 > 0 and fabs(check_t1) < fabs(check_t2)):
-                return
+        # 정적충돌 연산
+        Overlap = 0.5 * (Distance - 2 * self.radius)
+        self.x -= Overlap * (self.x - oppo_x) / Distance
+        self.y -= Overlap * (self.y - oppo_y) / Distance
 
-        self_theta = get_radian(self.vx, self.vy)
-        oppo_theta = get_radian(oppo_vx, oppo_vy)
-
-        self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta - ltheta)) * lxx / (self.m + oppo_m)) + self.vx * sin(self_theta - ltheta) * lyx
-        self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta - ltheta)) * lxy / (self.m + oppo_m)) + self.vy * sin(self_theta - ltheta) * lyy
+        pass
+        # if self.x < oppo_x:
+        #     lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
+        #     lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
+        # elif self.x > oppo_x:
+        #     lxx, lxy = get_local_x(oppo_x, oppo_y, self.x, self.y)
+        #     lyx, lyy = get_local_y(oppo_x, oppo_y, self.x, self.y)
+        # else:
+        #     self.vx, oppo_vx = oppo_vx, self.vx
+        #     return
+        #
+        # ltheta = get_radian(lxx, lxy)
+        #
+        # if self.x < oppo_x:
+        #     check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
+        #     check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
+        # elif self.x > oppo_x:
+        #     check_t1 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
+        #     check_t2 = get_internal_product(self.vx, self.vy, lxx, lxy)
+        #
+        # if (check_t1 <= 0 and check_t2 >= 0):
+        #     return
+        # if (check_t1 * check_t2 > 0):
+        #     if (check_t1 < 0 and fabs(check_t1) > fabs(check_t2)):
+        #         return
+        #     if (check_t1 > 0 and fabs(check_t1) < fabs(check_t2)):
+        #         return
+        #
+        # self_theta = get_radian(self.vx, self.vy)
+        # oppo_theta = get_radian(oppo_vx, oppo_vy)
+        #
+        # self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta - ltheta)) * lxx / (self.m + oppo_m)) + self.vx * sin(self_theta - ltheta) * lyx
+        # self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta - ltheta)) * lxy / (self.m + oppo_m)) + self.vy * sin(self_theta - ltheta) * lyy
 
 
 

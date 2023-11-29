@@ -39,7 +39,6 @@ def init():
     game_world.add_collision_pair('house:stone', None, blue_stone_2)
     game_world.add_collision_pair('house:stone', None, red_stone_1)
     game_world.add_collision_pair('house:stone', None, red_stone_2)
-    # game_world.add_collision_pair('house:stone', house_1, red_stone_1)
     game_world.add_collision_pair('stone:stone', blue_stone_1, blue_stone_2)
     pass
 
