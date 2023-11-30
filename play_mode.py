@@ -22,8 +22,8 @@ def init():
     running = True
 
     playing_background = background()
-    blue_stone_1 = blue_stone(400, 400, 0, 0)
-    blue_stone_2 = blue_stone(800, 200, 0, 0)
+    blue_stone_1 = blue_stone(400, 0, 0, 10)
+    blue_stone_2 = blue_stone(400, 800, 0, -10)
     red_stone_1 = red_stone(800, 550, 0, 0)
     red_stone_2 = red_stone(800, 450, 0, 0)
     house_1 = house()

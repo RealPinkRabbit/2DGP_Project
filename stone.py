@@ -337,7 +337,56 @@ class blue_stone:
 
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
-            self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
+            # 정적충돌 연산
+            Distance = sqrt(pow(self.x - oppo.x, 2) + pow(self.y - oppo.y, 2))
+            Overlap = 0.5 * (Distance - 2 * self.radius)
+            self.x -= Overlap * (self.x - oppo.x) / Distance
+            self.y -= Overlap * (self.y - oppo.y) / Distance
+            oppo.x += Overlap * (self.x - oppo.x) / Distance
+            oppo.y += Overlap * (self.x - oppo.x) / Distance
+
+            if self.x > oppo.x:
+                return
+            if self.x == oppo.x:
+                if self.y > oppo.y:
+                    return
+            # self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
+
+            # 동적충돌 연산
+            # self~oppo 방향 벡터
+            nx = (oppo.x - self.x) / Distance
+            ny = (oppo.y - self.y) / Distance
+
+            # 충돌 방향에 대한 법선 벡터
+            tx = -ny
+            ty = nx
+
+            # 법선 내적
+            dpTan1 = self.vx * tx + self.vy * ty
+            dpTan2 = oppo.vx * tx + oppo.vy * ty
+
+            # 충돌방향 내적
+            dpNorm1 = self.vx * nx + self.vy * ny
+            dpNorm2 = oppo.vx * nx + oppo.vy * ny
+
+            # 일직선 상의 모멘텀 보존
+            m1 = (dpNorm1 * (self.m - oppo.m) + 2 * oppo.m * dpNorm2) / (self.m + oppo.m)
+            m2 = (dpNorm2 * (oppo.m - self.m) + 2 * self.m * dpNorm1) / (self.m + oppo.m)
+
+            # kx = self.vx - oppo.vx
+            # ky = self.vy - oppo.vy
+            # p = 2 * (nx * kx + ny * ky) / self.m + oppo.m
+            # self.vx = self.vx - p * oppo.m * nx
+            # self.vy = self.vy - p * oppo.m * ny
+            # oppo.vx = oppo.vx + p * self.m * nx
+            # oppo.vy = oppo.vy + p * self.m * ny
+            self.vx = tx * dpTan1 + nx * m1
+            self.vy = ty * dpTan1 + ny * m1
+            oppo.vx = tx * dpTan2 + nx * m2
+            oppo.vy = ty * dpTan2 + ny * m2
+
+            # Distance = sqrt(pow(self.x - oppo.x, 2) + pow(self.y - oppo.y, 2))
+
         if group == 'house:stone':
             pass
 
@@ -354,39 +403,39 @@ class blue_stone:
 
     def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy):
 
-        Distance = sqrt(pow(self.x - oppo_x, 2) + pow(self.y - oppo_y, 2))
-
-        # # 동적충돌 연산
-        # # self~oppo 방향 벡터
-        # nx = (oppo_x - self.x) / Distance
-        # ny = (oppo_y - self.y) / Distance
-        #
-        # # 충돌 방향에 대한 법선 벡터
-        # tx = -ny
-        # ty = nx
-        #
-        # # 법선 내적
-        # dpTan1 = self.vx * tx + self.vy * ty
-        # dpTan2 = oppo_vx * tx + oppo_vy * ty
-        #
-        # # 충돌방향 내적
-        # dpNorm1 = self.vx * nx + self.vy * ny
-        # dpNorm2 = oppo_vx * nx + oppo_vy * ny
-        #
-        # # 일직선 상의 모멘텀 보존
-        # m1 = (dpNorm1 * (self.m - oppo_m) + 2*oppo_m * dpNorm2) / (self.m + oppo_m)
-        # m2 = (dpNorm2 * (self.m - oppo_m) + 2*oppo_m * dpNorm1) / (self.m + oppo_m)
-        #
-        #
-        # self.vx = tx * dpTan1 + nx * m1
-        # self.vy = ty * dpTan1 + ny * m1
-        # oppo_vx = tx * dpTan2 + nx * m2
-        # oppo_vy = ty * dpTan2 + ny * m2
-
         # 정적충돌 연산
+        Distance = sqrt(pow(self.x - oppo_x, 2) + pow(self.y - oppo_y, 2))
         Overlap = 0.5 * (Distance - 2 * self.radius)
         self.x -= Overlap * (self.x - oppo_x) / Distance
         self.y -= Overlap * (self.y - oppo_y) / Distance
+
+        # 동적충돌 연산
+        # self~oppo 방향 벡터
+        nx = (oppo_x - self.x) / Distance
+        ny = (oppo_y - self.y) / Distance
+
+        # 충돌 방향에 대한 법선 벡터
+        tx = -ny
+        ty = nx
+
+        # 법선 내적
+        dpTan1 = self.vx * tx + self.vy * ty
+        # dpTan2 = oppo_vx * tx + oppo_vy * ty
+
+        # 충돌방향 내적
+        dpNorm1 = self.vx * nx + self.vy * ny
+        dpNorm2 = oppo_vx * nx + oppo_vy * ny
+
+        # 일직선 상의 모멘텀 보존
+        m1 = (dpNorm1 * (self.m - oppo_m) + 2 * oppo_m * dpNorm2) / (self.m + oppo_m)
+        # m2 = (dpNorm2 * (self.m - oppo_m) + 2 * oppo_m * dpNorm1) / (self.m + oppo_m)
+
+
+        self.vx = tx * dpTan1 + nx * m1
+        self.vy = ty * dpTan1 + ny * m1
+        # oppo_vx = tx * dpTan2 + nx * m2
+        # oppo_vy = ty * dpTan2 + ny * m2
+
 
         pass
         # if self.x < oppo_x:
