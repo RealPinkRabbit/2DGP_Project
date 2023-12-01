@@ -340,6 +340,8 @@ class blue_stone:
             # 정적충돌 연산
             Distance = sqrt(pow(self.x - oppo.x, 2) + pow(self.y - oppo.y, 2))
             Overlap = 0.5 * (Distance - 2 * self.radius)
+            if Distance == 0:
+                return
             self.x -= Overlap * (self.x - oppo.x) / Distance
             self.y -= Overlap * (self.y - oppo.y) / Distance
             oppo.x += Overlap * (self.x - oppo.x) / Distance
@@ -350,7 +352,6 @@ class blue_stone:
             if self.x == oppo.x:
                 if self.y > oppo.y:
                     return
-            # self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
 
             # 동적충돌 연산
             # self~oppo 방향 벡터
@@ -401,97 +402,6 @@ class blue_stone:
             rad = acos(-mx)
         return rad
 
-    def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy):
-
-        # 정적충돌 연산
-        Distance = sqrt(pow(self.x - oppo_x, 2) + pow(self.y - oppo_y, 2))
-        Overlap = 0.5 * (Distance - 2 * self.radius)
-        self.x -= Overlap * (self.x - oppo_x) / Distance
-        self.y -= Overlap * (self.y - oppo_y) / Distance
-
-        # 동적충돌 연산
-        # self~oppo 방향 벡터
-        nx = (oppo_x - self.x) / Distance
-        ny = (oppo_y - self.y) / Distance
-
-        # 충돌 방향에 대한 법선 벡터
-        tx = -ny
-        ty = nx
-
-        # 법선 내적
-        dpTan1 = self.vx * tx + self.vy * ty
-        # dpTan2 = oppo_vx * tx + oppo_vy * ty
-
-        # 충돌방향 내적
-        dpNorm1 = self.vx * nx + self.vy * ny
-        dpNorm2 = oppo_vx * nx + oppo_vy * ny
-
-        # 일직선 상의 모멘텀 보존
-        m1 = (dpNorm1 * (self.m - oppo_m) + 2 * oppo_m * dpNorm2) / (self.m + oppo_m)
-        # m2 = (dpNorm2 * (self.m - oppo_m) + 2 * oppo_m * dpNorm1) / (self.m + oppo_m)
-
-
-        self.vx = tx * dpTan1 + nx * m1
-        self.vy = ty * dpTan1 + ny * m1
-        # oppo_vx = tx * dpTan2 + nx * m2
-        # oppo_vy = ty * dpTan2 + ny * m2
-
-
-        pass
-        # if self.x < oppo_x:
-        #     lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
-        #     lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
-        # elif self.x > oppo_x:
-        #     lxx, lxy = get_local_x(oppo_x, oppo_y, self.x, self.y)
-        #     lyx, lyy = get_local_y(oppo_x, oppo_y, self.x, self.y)
-        # else:
-        #     self.vx, oppo_vx = oppo_vx, self.vx
-        #     return
-        #
-        # ltheta = get_radian(lxx, lxy)
-        #
-        # if self.x < oppo_x:
-        #     check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
-        #     check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
-        # elif self.x > oppo_x:
-        #     check_t1 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
-        #     check_t2 = get_internal_product(self.vx, self.vy, lxx, lxy)
-        #
-        # if (check_t1 <= 0 and check_t2 >= 0):
-        #     return
-        # if (check_t1 * check_t2 > 0):
-        #     if (check_t1 < 0 and fabs(check_t1) > fabs(check_t2)):
-        #         return
-        #     if (check_t1 > 0 and fabs(check_t1) < fabs(check_t2)):
-        #         return
-        #
-        # self_theta = get_radian(self.vx, self.vy)
-        # oppo_theta = get_radian(oppo_vx, oppo_vy)
-        #
-        # self.vx = ((oppo_m * 2 * oppo_vx * cos(oppo_theta - ltheta)) * lxx / (self.m + oppo_m)) + self.vx * sin(self_theta - ltheta) * lyx
-        # self.vy = ((oppo_m * 2 * oppo_vy * cos(oppo_theta - ltheta)) * lxy / (self.m + oppo_m)) + self.vy * sin(self_theta - ltheta) * lyy
-
-
-
-
-# 정규화
-        # a_r, a_theta = coor_to_polcoor(self.vx, self.vy)
-        # a_theta -= ltheta
-        # tself_vx, tself_vy = polcoor_to_coor(a_r, a_theta)
-        # tself_theta = get_radian(tself_vx, tself_vy)
-
-        # o_r, o_theta = coor_to_polcoor(oppo_vx, oppo_vy)
-        # o_theta -= ltheta
-        # toppo_vx, toppo_vy = polcoor_to_coor(o_r, o_theta)
-        # toppo_theta = get_radian(toppo_vx, toppo_vy)
-
-        # tself_vx = ((oppo_m * 2 * oppo_vx * cos(-toppo_theta)) * lxx / (self.m + oppo_m)) - tself_vx * sin(-tself_theta) * lyx
-        # tself_vy = ((oppo_m * 2 * oppo_vy * cos(-toppo_theta)) * lxy / (self.m + oppo_m)) - tself_vy * sin(-tself_theta) * lyy
-
-        # a_r, a_theta = coor_to_polcoor(tself_vx, tself_vy)
-        # a_theta += ltheta
-        # self.vx, self.vy = polcoor_to_coor(a_r, a_theta)
-
 
 class red_stone:
 
@@ -516,7 +426,7 @@ class red_stone:
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.x + self.card_dx, self.y + self.card_dy, f'{self.message}', (0, 0, 0))
+        self.font.draw(self.x + self.card_dx - 10, self.y + self.card_dy, f'{self.message}', (0, 0, 0))
 
     def update(self):
         self.state_machine.update()
@@ -526,17 +436,17 @@ class red_stone:
 
     def stone_wall_collision(self):
         if (self.x < x_min_boundary + self.radius):
-            self.x += 2*(self.radius - (self.x - x_min_boundary))
+            self.x += 2 * (self.radius - (self.x - x_min_boundary))
             self.vx *= -1
         elif (self.x > x_max_boundary - self.radius):
-            self.x -= 2*(self.x - (x_max_boundary - self.radius))
+            self.x -= 2 * (self.x - (x_max_boundary - self.radius))
             self.vx *= -1
 
         if (self.y < y_min_boundary + self.radius):
-            self.y += 2*(self.radius - (self.y - y_min_boundary))
+            self.y += 2 * (self.radius - (self.y - y_min_boundary))
             self.vy *= -1
         elif (self.y > y_max_boundary - self.radius):
-            self.y -= 2*(self.y - (y_max_boundary - self.radius))
+            self.y -= 2 * (self.y - (y_max_boundary - self.radius))
             self.vy *= -1
 
     def get_bc(self):
@@ -544,12 +454,66 @@ class red_stone:
 
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
-            self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
+
+            # if self.x > oppo.x:
+            #     return
+            # if self.x == oppo.x:
+            #     if self.y > oppo.y:
+            #         return
+
+            # 정적충돌 연산
+            Distance = sqrt(pow(self.x - oppo.x, 2) + pow(self.y - oppo.y, 2))
+            Overlap = 0.5 * (Distance - 2 * self.radius)
+            self.x -= Overlap * (self.x - oppo.x) / Distance
+            self.y -= Overlap * (self.y - oppo.y) / Distance
+            # oppo.x += Overlap * (self.x - oppo.x) / Distance
+            # oppo.y += Overlap * (self.x - oppo.x) / Distance
+
+            # self.get_vxvy_after_collision(oppo.m, oppo.x, oppo.y, oppo.vx, oppo.vy)
+
+            # 동적충돌 연산
+            # self~oppo 방향 벡터
+            nx = (oppo.x - self.x) / Distance
+            ny = (oppo.y - self.y) / Distance
+
+            # 충돌 방향에 대한 법선 벡터
+            tx = -ny
+            ty = nx
+
+            # 법선 내적
+            dpTan1 = self.vx * tx + self.vy * ty
+            dpTan2 = oppo.vx * tx + oppo.vy * ty
+
+            # 충돌방향 내적
+            dpNorm1 = self.vx * nx + self.vy * ny
+            dpNorm2 = oppo.vx * nx + oppo.vy * ny
+
+            if dpNorm1 <= 0 and dpNorm2 >= 0:
+                return
+
+            # 일직선 상의 모멘텀 보존
+            m1 = (dpNorm1 * (self.m - oppo.m) + 2 * oppo.m * dpNorm2) / (self.m + oppo.m)
+            m2 = (dpNorm2 * (oppo.m - self.m) + 2 * self.m * dpNorm1) / (self.m + oppo.m)
+
+            # kx = self.vx - oppo.vx
+            # ky = self.vy - oppo.vy
+            # p = 2 * (nx * kx + ny * ky) / self.m + oppo.m
+            # self.vx = self.vx - p * oppo.m * nx
+            # self.vy = self.vy - p * oppo.m * ny
+            # oppo.vx = oppo.vx + p * self.m * nx
+            # oppo.vy = oppo.vy + p * self.m * ny
+            self.vx = tx * dpTan1 + nx * m1
+            self.vy = ty * dpTan1 + ny * m1
+            # oppo.vx = tx * dpTan2 + nx * m2
+            # oppo.vy = ty * dpTan2 + ny * m2
+
+            # Distance = sqrt(pow(self.x - oppo.x, 2) + pow(self.y - oppo.y, 2))
+
         if group == 'house:stone':
             pass
 
     def get_power(self):
-        return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
+        return sqrt(pow(self.vx, 2) + pow(self.vy, 2))
 
     def get_local_radian(self):
         mx, mv = get_unit_vector_xy(self.vx, self.vy)
@@ -558,37 +522,3 @@ class red_stone:
         else:
             rad = acos(-mx)
         return rad
-
-    def get_vxvy_after_collision(self, oppo_m, oppo_x, oppo_y, oppo_vx, oppo_vy):
-        if self.x < oppo_x:
-            lxx, lxy = get_local_x(self.x, self.y, oppo_x, oppo_y)
-            lyx, lyy = get_local_y(self.x, self.y, oppo_x, oppo_y)
-        elif self.x > oppo_x:
-            lxx, lxy = get_local_x(oppo_x, oppo_y, self.x, self.y)
-            lyx, lyy = get_local_y(oppo_x, oppo_y, self.x, self.y)
-        else:
-            self.vx, oppo_vx = oppo_vx, self.vx
-            return
-
-        ltheta = get_radian(lxx, lxy)
-
-        if self.x < oppo_x:
-            check_t1 = get_internal_product(self.vx, self.vy, lxx, lxy)
-            check_t2 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
-        elif self.x > oppo_x:
-            check_t1 = get_internal_product(oppo_vx, oppo_vy, lxx, lxy)
-            check_t2 = get_internal_product(self.vx, self.vy, lxx, lxy)
-
-        if (check_t1 <= 0 and check_t2 >= 0):
-            return
-        if (check_t1 * check_t2 > 0):
-            if (check_t1 < 0 and fabs(check_t1) > fabs(check_t2)):
-                return
-            if (check_t1 > 0 and fabs(check_t1) < fabs(check_t2)):
-                return
-
-        self_theta = get_radian(self.vx, self.vy)
-        oppo_theta = get_radian(oppo_vx, oppo_vy)
-
-        self.vx = ((oppo_m * 2 * oppo_vx * -cos(oppo_theta - ltheta)) * lxx / (self.m + oppo_m)) - self.vx * -sin(self_theta - ltheta) * lyx
-        self.vy = ((oppo_m * 2 * oppo_vy * -cos(oppo_theta - ltheta)) * lxy / (self.m + oppo_m)) - self.vy * -sin(self_theta - ltheta) * lyy

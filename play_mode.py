@@ -14,7 +14,7 @@ canvas_height = 800
 def init():
     global running
     global playing_background
-    global blue_stone_1, blue_stone_2
+    global blue_stone_1, blue_stone_2, blue_stone_3
     global red_stone_1
     global red_stone_2
     global house_1
@@ -22,8 +22,10 @@ def init():
     running = True
 
     playing_background = background()
-    blue_stone_1 = blue_stone(400, 0, 0, 10)
-    blue_stone_2 = blue_stone(400, 800, 0, -10)
+    blue_stone_1 = blue_stone(400, 400 - 64, 0, 0)
+    blue_stone_2 = blue_stone(400, 400, 0, 0)
+    blue_stone_3 = blue_stone(400, 400 + 64, 0, 0)
+
     red_stone_1 = red_stone(800, 550, 0, 0)
     red_stone_2 = red_stone(800, 450, 0, 0)
     house_1 = house()
@@ -31,15 +33,20 @@ def init():
     game_world.add_object(playing_background, 0)
     game_world.add_object(blue_stone_1, 3)
     game_world.add_object(blue_stone_2, 3)
+    game_world.add_object(blue_stone_3, 3)
     game_world.add_object(red_stone_1, 2)
     game_world.add_object(red_stone_2, 2)
     game_world.add_object(house_1, 1)
 
     game_world.add_collision_pair('house:stone', house_1, blue_stone_1)
     game_world.add_collision_pair('house:stone', None, blue_stone_2)
+    game_world.add_collision_pair('house:stone', None, blue_stone_3)
     game_world.add_collision_pair('house:stone', None, red_stone_1)
     game_world.add_collision_pair('house:stone', None, red_stone_2)
-    game_world.add_collision_pair('stone:stone', blue_stone_1, blue_stone_2)
+    game_world.add_collision_pair('stone:stone', blue_stone_1, blue_stone_1)
+    game_world.add_collision_pair('stone:stone', blue_stone_2, blue_stone_2)
+    game_world.add_collision_pair('stone:stone', blue_stone_3, blue_stone_3)
+
     pass
 
 def finish():

@@ -57,6 +57,9 @@ def handle_collisions():
         for a in pairs[0]:
             for b in pairs[1]:
                 if collide(a, b):
+                    if group == 'stone:stone':
+                        a.handle_collision(group, b)
+                        continue
                     a.handle_collision(group, b)
                     b.handle_collision(group, a)
 
