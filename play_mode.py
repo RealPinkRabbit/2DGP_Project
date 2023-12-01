@@ -46,6 +46,8 @@ def init():
     game_world.add_collision_pair('stone:stone', blue_stone_1, blue_stone_1)
     game_world.add_collision_pair('stone:stone', blue_stone_2, blue_stone_2)
     game_world.add_collision_pair('stone:stone', blue_stone_3, blue_stone_3)
+    game_world.add_collision_pair('stone:stone', red_stone_1, red_stone_1)
+    game_world.add_collision_pair('stone:stone', red_stone_2, red_stone_2)
 
     pass
 

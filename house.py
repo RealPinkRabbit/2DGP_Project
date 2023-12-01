@@ -59,6 +59,9 @@ class house:
             self.score_color = '--'
             self.score = 0
             return
+        elif len(self.stones) == 1:
+            self.score = 1
+            self.score_color = self.stones_clone[0][0]
         else:
             self.score_color = self.stones_clone[0][0]
             if self.stones_clone[0][1] == self.stones_clone[1][1]:
