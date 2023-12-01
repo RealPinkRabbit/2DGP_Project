@@ -337,6 +337,13 @@ class blue_stone:
 
     def handle_collision(self, group, oppo):
         if group == 'stone:stone':
+
+            if self.x > oppo.x:
+                return
+            if self.x == oppo.x:
+                if self.y > oppo.y:
+                    return
+
             # 정적충돌 연산
             Distance = sqrt(pow(self.x - oppo.x, 2) + pow(self.y - oppo.y, 2))
             Overlap = 0.5 * (Distance - 2 * self.radius)
@@ -347,11 +354,11 @@ class blue_stone:
             oppo.x += Overlap * (self.x - oppo.x) / Distance
             oppo.y += Overlap * (self.x - oppo.x) / Distance
 
-            if self.x > oppo.x:
-                return
-            if self.x == oppo.x:
-                if self.y > oppo.y:
-                    return
+            # if self.x > oppo.x:
+            #     return
+            # if self.x == oppo.x:
+            #     if self.y > oppo.y:
+            #         return
 
             # 동적충돌 연산
             # self~oppo 방향 벡터
