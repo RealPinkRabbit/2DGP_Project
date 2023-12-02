@@ -1,6 +1,7 @@
 from pico2d import *
 
 import game_framework
+import pause_mode
 import title_mode
 from stone import blue_stone, red_stone
 from house import house
@@ -62,7 +63,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.change_mode(title_mode)
+            game_framework.push_mode(pause_mode)
             # game_framework.quit()
         else:
             blue_stone_1.handle_event(event)
