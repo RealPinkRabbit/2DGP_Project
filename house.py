@@ -11,7 +11,7 @@ class house:
 
     def __init__(self, x = 476, y = 5024 - 600):
         self.x, self.y = x, y
-        self.sx, self.sy = None, None
+        self.sx, self.sy = 0, 0
         self.radius = 200
         self.stones = []
         self.stones_clone = []

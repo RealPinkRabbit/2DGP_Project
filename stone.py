@@ -306,8 +306,8 @@ class blue_stone:
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
         self.vx, self.vy = vx, vy
-        self.sx = None
-        self.sy = None
+        self.sx = 0
+        self.sy = 0
         self.card_dx, self.card_dy = 0, 0
         self.message = ''
         self.m = 100
@@ -417,6 +417,8 @@ class red_stone:
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
         self.vx, self.vy = vx, vy
+        self.sx = 0
+        self.sy = 0
         self.card_dx, self.card_dy = 0, 0
         self.message = ''
         self.m = 100
@@ -424,7 +426,7 @@ class red_stone:
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.color = 'RED'
-        self.font = load_font('ENCR10B.TTF', 16)
+        self.font = load_font('ENCR10B.TTF', 32)
         if (red_stone.image == None):
             red_stone.image = load_image('Stone_Red_64x64.png')
 
