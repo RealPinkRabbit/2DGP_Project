@@ -1,5 +1,5 @@
 from pico2d import get_events, load_image, clear_canvas, update_canvas, get_time
-from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEMOTION
+from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP
 
 import game_framework
 import play_mode
@@ -12,8 +12,8 @@ def init():
     global Act_Button_1, Act_Button_2
     Act_Button_1, Act_Button_2 = 0, 0
     image = load_image('Title_1280x800.png')
-    start_image = load_image('Game_Start_Banner_320x256.png')
-    method_image = load_image('Game_Method_Banner_320x256.png')
+    start_image = load_image('Game_Start_Banner_320x384.png')
+    method_image = load_image('Game_Method_Banner_320x384.png')
 
 
 def finish():
@@ -45,13 +45,23 @@ def handle_events():
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
             game_framework.change_mode(play_mode)
-        elif event.type == SDL_MOUSEMOTION:
+        elif event.type == SDL_MOUSEMOTION or event.type == SDL_MOUSEBUTTONDOWN or event.type == SDL_MOUSEBUTTONUP:
             if event.x >= 1280 - 350 and event.x <= 1280 - 350 + 320 and 800 - 1 - event.y >= 200 and 800 - 1 - event.y <= 200 + 128:
-                Act_Button_1 = 1
+                if event.type == SDL_MOUSEBUTTONDOWN:
+                    Act_Button_1 = 2
+                else:
+                    Act_Button_1 = 1
+                if event.type == SDL_MOUSEBUTTONUP:
+                    game_framework.change_mode(play_mode)
             else:
                 Act_Button_1 = 0
             if event.x >= 1280 - 350 and event.x <= 1280 - 350 + 320 and 800 - 1 - event.y >= 50 and 800 - 1 - event.y <= 50 + 128:
-                Act_Button_2 = 1
+                if event.type == SDL_MOUSEBUTTONDOWN:
+                    Act_Button_2 = 2
+                else:
+                    Act_Button_2 = 1
+                if event.type == SDL_MOUSEBUTTONUP:
+                    pass
             else:
                 Act_Button_2 = 0
 
