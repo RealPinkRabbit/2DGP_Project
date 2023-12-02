@@ -2,6 +2,7 @@ from pico2d import *
 
 import game_framework
 import pause_mode
+import result_mode
 import title_mode
 from stone import blue_stone, red_stone
 from house import house
@@ -65,6 +66,8 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.push_mode(pause_mode)
             # game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            game_framework.change_mode(result_mode)
         else:
             blue_stone_1.handle_event(event)
     pass
