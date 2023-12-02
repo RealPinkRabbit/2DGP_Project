@@ -3,12 +3,13 @@ from math import *
 
 import game_framework
 import game_world
+import play_mode
 
-PIXEL_PER_FEET = (10.0 / 0.3)
+PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 20.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
-RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_FEET)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -172,10 +173,10 @@ def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
 
 
 # 추후 조정
-x_min_boundary = 0
-x_max_boundary = 1280
-y_min_boundary = 124
-y_max_boundary = 800 - 124
+x_min_boundary = 200
+x_max_boundary = 752
+y_min_boundary = 0
+y_max_boundary = 10000
 
 class Idle:
     @staticmethod
@@ -240,6 +241,8 @@ class Idle:
     def do(stone):
         stone.x += stone.vx * game_framework.frame_time * RUN_SPEED_PPS
         stone.y += stone.vy * game_framework.frame_time * RUN_SPEED_PPS
+        stone.sx = stone.x - play_mode.playing_background.window_left
+        stone.sy = stone.y - play_mode.playing_background.window_bottom
 
         stone.stone_wall_collision()
 
@@ -253,7 +256,7 @@ class Idle:
 
     @staticmethod
     def draw(stone):
-        stone.image.draw(stone.x, stone.y)
+        stone.image.draw(stone.sx, stone.sy)
         pass
 
 class StateMachine:
@@ -303,6 +306,8 @@ class blue_stone:
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
         self.vx, self.vy = vx, vy
+        self.sx = None
+        self.sy = None
         self.card_dx, self.card_dy = 0, 0
         self.message = ''
         self.m = 100
