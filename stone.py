@@ -430,7 +430,7 @@ class red_stone:
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.x + self.card_dx - 10, self.y + self.card_dy, f'{self.message}', (0, 0, 0))
+        self.font.draw(self.sx + self.card_dx - 10, self.sy + self.card_dy, f'{self.message}', (0, 0, 0))
 
     def update(self):
         self.state_machine.update()
