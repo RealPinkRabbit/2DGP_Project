@@ -22,7 +22,7 @@ class FixedBackground:
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
         self.w = self.image.w
-        self.h = self.image.h
+        self.h = self.image.h - 250
         self.window_left = 0
         self.window_bottom = 0
 

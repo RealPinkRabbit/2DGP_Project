@@ -1,13 +1,17 @@
 from pico2d import *
 
+import play_mode
+
+
 def get_pow_distance(ax, ay, ox, oy):
     return pow(int(ox-ax), 2) + pow(int(oy-ay), 2)
 
 class house:
     image = None
 
-    def __init__(self):
-        self.x, self.y = 800, 400
+    def __init__(self, x = 476, y = 5024 - 600):
+        self.x, self.y = x, y
+        self.sx, self.sy = None, None
         self.radius = 200
         self.stones = []
         self.stones_clone = []
@@ -20,7 +24,7 @@ class house:
             house.image = load_image('House_400x400.png')
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.image.draw(self.sx, self.sy)
         if len(self.stones_clone) == 0:
             self.RGB = (0, 0, 0)
         elif self.score_color == '--':
@@ -29,9 +33,11 @@ class house:
             self.RGB = (255, 0, 0)
         elif self.stones_clone[0][0] == 'BLUE':
             self.RGB = (0, 0, 255)
-        self.font.draw(self.x - 170, self.y + 250, f'{self.score_color} : {self.score}', self.RGB)
+        self.font.draw(self.sx - 170, self.sy + 250, f'{self.score_color} : {self.score}', self.RGB)
 
     def update(self):
+        self.sx = self.x - play_mode.playing_background.window_left
+        self.sy = self.y - play_mode.playing_background.window_bottom
         self.stones_clone = self.stones.copy()
         self.sort_distance()
         self.update_score()

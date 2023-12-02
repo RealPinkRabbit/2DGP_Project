@@ -10,6 +10,7 @@ RUN_SPEED_KMPH = 20.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+SCREEN_BIAS = 200
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -174,7 +175,7 @@ def get_cross_xy(ax, ay, avx, avy, ox, oy, ovx, ovy):
 
 # 추후 조정
 x_min_boundary = 200
-x_max_boundary = 752
+x_max_boundary = 200 + 552
 y_min_boundary = 0
 y_max_boundary = 10000
 
@@ -256,7 +257,7 @@ class Idle:
 
     @staticmethod
     def draw(stone):
-        stone.image.draw(stone.sx, stone.sy)
+        stone.image.draw(stone.sx, stone.sy - SCREEN_BIAS)
         pass
 
 class StateMachine:
@@ -321,7 +322,7 @@ class blue_stone:
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.x + self.card_dx - 10, self.y + self.card_dy, f'{self.message}', (0, 0, 0))
+        self.font.draw(self.sx + self.card_dx - 10, self.sy + self.card_dy - SCREEN_BIAS, f'{self.message}', (0, 0, 0))
 
     def update(self):
         self.state_machine.update()
