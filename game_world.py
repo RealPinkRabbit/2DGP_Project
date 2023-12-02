@@ -64,5 +64,7 @@ def handle_collisions():
                     b.handle_collision(group, a)
 
 def clear():
+    global collision_pairs
     for layer in objects:
         layer.clear()
+    collision_pairs = {}

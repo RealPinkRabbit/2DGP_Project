@@ -7,12 +7,20 @@ import play_mode
 
 def init():
     global image
+    global start_image
+    global method_image
     image = load_image('Title_1280x800.png')
+    start_image = load_image('Game_Start_Banner_320x256.png')
+    method_image = load_image('Game_Method_Banner_320x256.png')
 
 
 def finish():
     global image
+    global start_image
+    global method_image
     del image
+    del start_image
+    del method_image
 
 def update():
     pass
