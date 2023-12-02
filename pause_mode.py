@@ -31,6 +31,7 @@ def update():
 
 def draw():
     clear_canvas()
+    game_world.render_object()
     pause_image.clip_draw_to_origin(0, 0, 1280, 800, 0, 0)
     resume_image.clip_draw_to_origin(0, 0 + 80*Act_Button_3, 384, 80, 640 - 384//2, 350 - 80//2)
     quit_image.clip_draw_to_origin(0, 0 + 80*Act_Button_4, 256, 80, 640 - 256//2, 200 - 80//2)
