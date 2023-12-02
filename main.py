@@ -6,11 +6,4 @@ import game_framework
 
 open_canvas(play_mode.canvas_width, play_mode.canvas_height)
 game_framework.run(start_mode)
-# play_mode.init()
-# while play_mode.running:
-#     play_mode.handle_events()
-#     play_mode.update()
-#     play_mode.draw()
-#     delay(0.01)
-# play_mode.finish()
 close_canvas()
