@@ -71,6 +71,7 @@ def handle_events():
 def update():
     game_world.update_object()
     game_world.handle_collisions()
+    delay(0.01)
 
 def draw():
     clear_canvas()

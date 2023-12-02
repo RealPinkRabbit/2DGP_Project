@@ -1,6 +1,7 @@
 running = None
 stack = None
 from pico2d import delay
+import time
 
 
 def change_mode(mode):
@@ -42,15 +43,22 @@ def quit():
 
 def run(start_mode):
     global running, stack
+    global frame_time
     running = True
     stack = [start_mode]
     start_mode.init()
 
+    frame_time = 0.0
+    current_time = time.time()
     while (running):
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()
-        delay(0.01)
+        # delay(0.01)
+        frame_time = time.time() - current_time
+        frame_rate = 1.0 / frame_time
+        current_time += frame_time
+        print(f'Frame Time: {frame_time}, Frame Rate: {frame_rate}')
 
     # repeatedly delete the top of the stack
     while (len(stack) > 0):

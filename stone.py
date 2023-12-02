@@ -1,7 +1,14 @@
 from pico2d import *
 from math import *
 
+import game_framework
 import game_world
+
+PIXEL_PER_FEET = (10.0 / 0.3)
+RUN_SPEED_KMPH = 20.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_FEET)
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -231,8 +238,8 @@ class Idle:
 
     @staticmethod
     def do(stone):
-        stone.x += stone.vx
-        stone.y += stone.vy
+        stone.x += stone.vx * game_framework.frame_time * RUN_SPEED_PPS
+        stone.y += stone.vy * game_framework.frame_time * RUN_SPEED_PPS
 
         stone.stone_wall_collision()
 
