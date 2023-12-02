@@ -17,7 +17,7 @@ def finish():
 
 def update():
     if get_time() - logo_start_time >= 2.0:
-        game_framework.change_mode(play_mode)
+        game_framework.change_mode(title_mode)
     pass
 
 def draw():

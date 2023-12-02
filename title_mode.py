@@ -19,7 +19,7 @@ def update():
 
 def draw():
     clear_canvas()
-    image.draw(400, 300)
+    image.clip_draw_to_origin(0, 0, 1280, 800, 0, 0)
     update_canvas()
     pass
 
