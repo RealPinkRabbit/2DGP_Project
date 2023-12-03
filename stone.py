@@ -184,25 +184,38 @@ class Idle:
         if space_down(e):
             if stone.is_launched == False:
                 stone.is_launched = True
-                stone.vy = stone.power[0]
+                stone.vy = stone.power[stone.power_pointer]
         elif right_down(e):
-            stone.vx += stone.get_power() / 100
-            stone.vy += stone.get_power() / 200
-            stone.card_dx = 50
-            stone.card_dy = 0
-            stone.message = 'R'
+            if stone.is_launched == False:
+                stone.x += 32
+            else:
+                stone.vx += stone.get_power() / 100
+                stone.vy += stone.get_power() / 200
+                stone.card_dx = 50
+                stone.card_dy = 0
+                stone.message = 'R'
         elif left_down(e):
-            stone.vx -= stone.get_power() / 100
-            stone.vy += stone.get_power() / 200
-            stone.card_dx = -50
-            stone.card_dy = 0
-            stone.message = 'L'
+            if stone.is_launched == False:
+                stone.x -= 32
+            else:
+                stone.vx -= stone.get_power() / 100
+                stone.vy += stone.get_power() / 200
+                stone.card_dx = -50
+                stone.card_dy = 0
+                stone.message = 'L'
         elif up_down(e):
-            stone.vy += stone.get_power() / 100
-            stone.card_dx = 0
-            stone.card_dy = 50
-            stone.message = 'U'
+            if stone.is_launched == False:
+                if stone.power_pointer < 2:
+                    stone.power_pointer += 1
+            else:
+                stone.vy += stone.get_power() / 100
+                stone.card_dx = 0
+                stone.card_dy = 50
+                stone.message = 'U'
         elif down_down(e):
+            if stone.is_launched == False:
+                if stone.power_pointer > 0:
+                    stone.power_pointer -= 1
             # stone.vy -= stone.get_power() / 100
             # stone.card_dx = 0
             # stone.card_dy = -50
@@ -276,6 +289,14 @@ class Idle:
 
     @staticmethod
     def draw(stone):
+        global temp
+        stone.font.draw(stone.sx + stone.card_dx - 10, stone.sy + stone.card_dy, f'{stone.message}', (0, 0, 0))
+        if (stone.is_launched == False):
+            temp = stone.x
+            stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, stone.x - stone.radius, 0)
+            stone.powerGauge_image.clip_draw_to_origin(0 + 100 * stone.power_pointer, 0, 100, 100, stone.sx - 100, stone.sy - 50)
+        else:
+            stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, temp - stone.radius, 0)
         stone.image.draw(stone.sx, stone.sy)
         pass
 
@@ -319,6 +340,8 @@ class StateMachine:
 class blue_stone:
 
     image = None
+    powerGauge_image = None
+    estimated_path_image = None
     minV = 0.02
     vDecRate = 0.995
     slowVDecRate_1 = 0.992
@@ -336,16 +359,20 @@ class blue_stone:
         self.radius = blue_stone.default_radius
         self.is_launched = False
         self.power = [25, 30, 35]
+        self.power_pointer = 0
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.color = 'BLUE'
         self.font = load_font('ENCR10B.TTF', 32)
         if (blue_stone.image == None):
             blue_stone.image = load_image('Stone_Blue_32x32.png')
+        if (blue_stone.powerGauge_image == None):
+            blue_stone.powerGauge_image = load_image('Power_Gauge_300x100.png')
+        if (blue_stone.estimated_path_image == None):
+            blue_stone.estimated_path_image = load_image('Estimated_Path_32x5024.png')
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.sx + self.card_dx - 10, self.sy + self.card_dy, f'{self.message}', (0, 0, 0))
 
     def update(self):
         self.state_machine.update()
@@ -457,7 +484,6 @@ class red_stone:
 
     def draw(self):
         self.state_machine.draw()
-        self.font.draw(self.sx + self.card_dx - 10, self.sy + self.card_dy, f'{self.message}', (0, 0, 0))
 
     def update(self):
         self.state_machine.update()
