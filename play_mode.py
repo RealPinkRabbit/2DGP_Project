@@ -17,7 +17,8 @@ def init():
     global running
     global playing_background
     global playing_stone
-    global blue_stone_1, blue_stone_2, blue_stone_3
+    global blue_stone_1
+    # global blue_stone_2, blue_stone_3
     # global red_stone_1
     # global red_stone_2
     global house_1
@@ -27,7 +28,7 @@ def init():
 
     playing_background = background()
     # blue_stone_1 = blue_stone(400, 400 - 64, 0, 0)
-    playing_stone.append(blue_stone(400, 400 - 64, 0, 0))
+    playing_stone.append(blue_stone(200 + 552//2, 500, 0, 0))
     # blue_stone_2 = blue_stone(400, 400, 0, 0)
     # blue_stone_3 = blue_stone(400, 400 + 64, 0, 0)
     #
@@ -69,8 +70,8 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.push_mode(pause_mode)
             # game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            game_framework.change_mode(result_mode)
+        # elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+        #     game_framework.change_mode(result_mode)
         else:
             if playing_stone[0] != None:
                 playing_stone[0].handle_event(event)

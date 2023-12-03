@@ -5,11 +5,11 @@ import game_framework
 import game_world
 import play_mode
 
-PIXEL_PER_METER = (10.0 / 0.3)
-RUN_SPEED_KMPH = 20.0
-RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
-RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
-RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+PIXEL_PER_FEET = (8.0 / 1.0)
+RUN_SPEED_KFPH = 20.0
+RUN_SPEED_FPM = (RUN_SPEED_KFPH * 1000.0 / 60.0)
+RUN_SPEED_FPS = (RUN_SPEED_FPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_FPS * PIXEL_PER_FEET)
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -182,17 +182,18 @@ class Idle:
     @staticmethod
     def enter(stone, e):
         if space_down(e):
-            stone.x = 750
-            stone.y = 400
-            stone.vx = 0
-            stone.vy = 0
+            if stone.is_launched == False:
+                stone.is_launched = True
+                stone.vy = stone.power[0]
         elif right_down(e):
             stone.vx += stone.get_power() / 100
+            stone.vy += stone.get_power() / 200
             stone.card_dx = 50
             stone.card_dy = 0
             stone.message = 'R'
         elif left_down(e):
             stone.vx -= stone.get_power() / 100
+            stone.vy += stone.get_power() / 200
             stone.card_dx = -50
             stone.card_dy = 0
             stone.message = 'L'
@@ -202,10 +203,11 @@ class Idle:
             stone.card_dy = 50
             stone.message = 'U'
         elif down_down(e):
-            stone.vy -= stone.get_power() / 100
-            stone.card_dx = 0
-            stone.card_dy = -50
-            stone.message = 'D'
+            # stone.vy -= stone.get_power() / 100
+            # stone.card_dx = 0
+            # stone.card_dy = -50
+            # stone.message = 'D'
+            pass
         elif right_up(e):
             stone.message = ''
         elif left_up(e):
@@ -213,24 +215,32 @@ class Idle:
         elif up_up(e):
             stone.message = ''
         elif down_up(e):
-            stone.message = ''
+            # stone.message = ''
+            pass
         elif z_down(e):
-            stone.vx = 100
+            # stone.vx = 100
+            pass
         elif x_down(e):
-            stone.vy = 100
+            # stone.vy = 100
+            pass
         elif w_down(e):
-            stone.vy = 5
+            # stone.vy = 5
+            pass
         elif a_down(e):
-            stone.vx = -5
+            # stone.vx = -5
+            pass
         elif s_down(e):
-            stone.vy = -5
+            # stone.vy = -5
+            pass
         elif d_down(e):
-            stone.vx = 5
+            # stone.vx = 5
+            pass
         elif r_down(e):
-            stone.x = 400
-            stone.y = 400
-            stone.vx = 0
-            stone.vy = 0
+            # stone.x = 400
+            # stone.y = 400
+            # stone.vx = 0
+            # stone.vy = 0
+            pass
         pass
 
     @staticmethod
@@ -246,11 +256,21 @@ class Idle:
 
         stone.stone_wall_collision()
 
-        stone.vx *= stone.vDecRate
+        if stone.vx >= 6:
+            stone.vx *= stone.vDecRate
+        elif stone.vx >= 3:
+            stone.vx *= stone.slowVDecRate_1
+        else:
+            stone.vx *= stone.slowVDecRate_2
         if (fabs(stone.vx) < stone.minV):
             stone.vx = 0
 
-        stone.vy *= stone.vDecRate
+        if stone.vy >= 6:
+            stone.vy *= stone.vDecRate
+        elif stone.vx >= 3:
+            stone.vy *= stone.slowVDecRate_1
+        else:
+            stone.vy *= stone.slowVDecRate_2
         if (fabs(stone.vy) < stone.minV):
             stone.vy = 0
 
@@ -300,7 +320,9 @@ class blue_stone:
 
     image = None
     minV = 0.02
-    vDecRate = 0.98
+    vDecRate = 0.995
+    slowVDecRate_1 = 0.992
+    slowVDecRate_2 = 0.99
     default_radius = 16
 
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
@@ -312,6 +334,8 @@ class blue_stone:
         self.message = ''
         self.m = 100
         self.radius = blue_stone.default_radius
+        self.is_launched = False
+        self.power = [25, 30, 35]
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.color = 'BLUE'
@@ -423,6 +447,7 @@ class red_stone:
         self.message = ''
         self.m = 100
         self.radius = blue_stone.default_radius
+        self.is_launched = False
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.color = 'RED'
