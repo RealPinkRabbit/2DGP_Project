@@ -7,20 +7,24 @@ import play_mode
 
 def init():
     global image
+    global main_image
     global start_image
     global method_image
     global Act_Button_1, Act_Button_2
     Act_Button_1, Act_Button_2 = 0, 0
     image = load_image('Title_1280x800.png')
+    main_image = load_image('Main_Image_1280x800.png')
     start_image = load_image('Game_Start_Banner_320x384.png')
     method_image = load_image('Game_Method_Banner_320x384.png')
 
 
 def finish():
     global image
+    global main_image
     global start_image
     global method_image
     del image
+    del main_image
     del start_image
     del method_image
 
@@ -30,6 +34,7 @@ def update():
 def draw():
     clear_canvas()
     image.clip_draw_to_origin(0, 0, 1280, 800, 0, 0)
+    main_image.clip_draw_to_origin(0, 0, 1280, 800, 0, 0)
     start_image.clip_draw_to_origin(0, 0 + 128 * Act_Button_1, 320, 128, 1280 - 350, 200)
     method_image.clip_draw_to_origin(0, 0 + 128 * Act_Button_2, 320, 128, 1280 - 350, 50)
     update_canvas()
