@@ -301,7 +301,7 @@ class blue_stone:
     image = None
     minV = 0.02
     vDecRate = 0.98
-    default_radius = 32
+    default_radius = 16
 
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
@@ -317,7 +317,7 @@ class blue_stone:
         self.color = 'BLUE'
         self.font = load_font('ENCR10B.TTF', 32)
         if (blue_stone.image == None):
-            blue_stone.image = load_image('Stone_Blue_64x64.png')
+            blue_stone.image = load_image('Stone_Blue_32x32.png')
 
     def draw(self):
         self.state_machine.draw()
@@ -412,7 +412,7 @@ class red_stone:
     image = None
     minV = 0.02
     vDecRate = 0.98
-    default_radius = 32
+    default_radius = 16
 
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
         self.x, self.y = x, y
@@ -428,7 +428,7 @@ class red_stone:
         self.color = 'RED'
         self.font = load_font('ENCR10B.TTF', 32)
         if (red_stone.image == None):
-            red_stone.image = load_image('Stone_Red_64x64.png')
+            red_stone.image = load_image('Stone_Red_32x32.png')
 
     def draw(self):
         self.state_machine.draw()
