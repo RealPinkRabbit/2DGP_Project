@@ -236,15 +236,8 @@ class Idle:
             pass
         elif z_down(e):
             play_mode.playing_background.view_mode = True
-            # if (stone.is_launched == False):
-            #     stone.y = 8000
-            # stone.vx = 100
-            pass
         elif z_up(e):
             play_mode.playing_background.view_mode = False
-            # if (stone.is_launched == False):
-            #     stone.y = 500
-            pass
         elif x_down(e):
             # stone.vy = 100
             pass
