@@ -44,6 +44,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            play_mode.playing_background.bgm.set_volume(32)
             game_framework.pop_mode()
         elif event.type == SDL_MOUSEMOTION or event.type == SDL_MOUSEBUTTONDOWN or event.type == SDL_MOUSEBUTTONUP:
             if event.x >= 640 - 384//2 and event.x <= 640 - 384//2 + 384 and 800 - 1 - event.y >= 350 - 80//2 and 800 - 1 - event.y <= 350 - 80//2 + 80:
@@ -52,6 +53,7 @@ def handle_events():
                 else:
                     Act_Button_1 = 1
                 if event.type == SDL_MOUSEBUTTONUP:
+                    play_mode.playing_background.bgm.set_volume(32)
                     game_framework.pop_mode()
             else:
                 Act_Button_1 = 0
@@ -63,6 +65,7 @@ def handle_events():
                 if event.type == SDL_MOUSEBUTTONUP:
                     game_world.clear()
                     game_framework.pop_mode()
+                    play_mode.playing_background.bgm.stop()
                     game_framework.change_mode(title_mode)
             else:
                 Act_Button_2 = 0

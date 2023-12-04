@@ -300,7 +300,7 @@ class Idle:
             temp = stone.x
             stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, stone.sx - stone.radius, 0)
             stone.powerGauge_image.clip_draw_to_origin(0 + 100 * stone.power_pointer, 0, 100, 100, stone.sx - 100, stone.sy - 50)
-        else:
+        elif stone.is_handling == True:
             stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, temp - stone.radius, 0)
         stone.image.draw(stone.sx, stone.sy)
         pass
@@ -363,6 +363,7 @@ class blue_stone:
         self.m = 100
         self.radius = blue_stone.default_radius
         self.is_launched = False
+        self.is_handling = True
         self.power = [25, 30, 35]
         self.power_pointer = 0
         self.state_machine = StateMachine(self)

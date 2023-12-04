@@ -5,9 +5,12 @@ from math import pow
 objects = [ [] for _ in range(5) ] # 시각 월드
 collision_pairs = {} # 충돌 월드
 
-
 def add_object(o, depth = 0):
     objects[depth].append(o)
+
+def change_depth(o, changed_depth = 0):
+    remove_object(o)
+    objects[changed_depth].append(o)
 
 
 def remove_collision_object(o):
@@ -22,7 +25,6 @@ def remove_object(o):
     for layer in objects:
         if o in layer:
             layer.remove(o)
-            remove_collision_object(o)
             return
     raise ValueError('Canont delete non existing object')
 
@@ -67,4 +69,4 @@ def clear():
     global collision_pairs
     for layer in objects:
         layer.clear()
-    collision_pairs = {}
+    collision_pairs.clear()

@@ -1,4 +1,4 @@
-from pico2d import get_events, load_image, clear_canvas, update_canvas, get_time
+from pico2d import get_events, load_image, clear_canvas, update_canvas, get_time, load_music
 from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP
 
 import game_framework
@@ -13,6 +13,9 @@ def init():
     global Act_Button_1, Act_Button_2
     Act_Button_1, Act_Button_2 = 0, 0
     image = load_image('Title_1280x800.png')
+    image.bgm = load_music('Curling_Title.mp3')
+    image.bgm.set_volume(32)
+    image.bgm.repeat_play()
     main_image = load_image('Main_Image_1280x800.png')
     start_image = load_image('Game_Start_Banner_320x384.png')
     method_image = load_image('Game_Method_Banner_320x384.png')
@@ -42,6 +45,7 @@ def draw():
 
 def handle_events():
     global Act_Button_1, Act_Button_2
+    global image
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -49,6 +53,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            image.bgm.stop()
             game_framework.change_mode(play_mode)
         elif event.type == SDL_MOUSEMOTION or event.type == SDL_MOUSEBUTTONDOWN or event.type == SDL_MOUSEBUTTONUP:
             if event.x >= 1280 - 350 and event.x <= 1280 - 350 + 320 and 800 - 1 - event.y >= 200 and 800 - 1 - event.y <= 200 + 128:
@@ -57,6 +62,7 @@ def handle_events():
                 else:
                     Act_Button_1 = 1
                 if event.type == SDL_MOUSEBUTTONUP:
+                    image.bgm.stop()
                     game_framework.change_mode(play_mode)
             else:
                 Act_Button_1 = 0

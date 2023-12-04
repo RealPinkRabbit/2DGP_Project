@@ -26,18 +26,18 @@ class FixedBackground:
         self.window_left = 0
         self.window_bottom = 0
         self.view_mode = False
+        self.bgm = load_music('Curling_Playing.mp3')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
 
     def draw(self):
         self.image.clip_draw_to_origin(self.window_left, self.window_bottom, self.cw, self.ch, 0, 0)
 
     def update(self):
-        if play_mode.playing_stone[0] != None:
-            self.window_left = int(play_mode.playing_stone[0].x) - self.cw // 2
-            self.window_bottom = int(play_mode.playing_stone[0].y) - self.ch // 2
-            self.window_left = clamp(0, int(play_mode.playing_stone[0].x) - self.cw // 2, self.w - self.cw - 1)
-            if (self.view_mode == False):
-                self.window_bottom = clamp(0, int(play_mode.playing_stone[0].y) - self.ch // 2 + 200, self.h - self.ch - 1)
-            else:
-                self.window_bottom = 5024 - 250 - 800 - 1
+        self.window_left = int(play_mode.playing_stone[0].x) - self.cw // 2
+        self.window_bottom = int(play_mode.playing_stone[0].y) - self.ch // 2
+        self.window_left = clamp(0, int(play_mode.playing_stone[0].x) - self.cw // 2, self.w - self.cw - 1)
+        if (self.view_mode == False):
+            self.window_bottom = clamp(0, int(play_mode.playing_stone[0].y) - self.ch // 2 + 200, self.h - self.ch - 1)
         else:
-            self.cw, self.ch = 0, 0
+            self.window_bottom = 5024 - 250 - 800 - 1
