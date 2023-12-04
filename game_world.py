@@ -24,7 +24,7 @@ def remove_object(o):
             layer.remove(o)
             remove_collision_object(o)
             return
-    raise ValueError('Cannont delete non existing object')
+    raise ValueError('Canont delete non existing object')
 
 def update_object():
     for layer in objects:
