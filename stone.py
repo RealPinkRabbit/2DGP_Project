@@ -188,6 +188,8 @@ class Idle:
         elif right_down(e):
             if stone.is_launched == False:
                 stone.x += 32
+                if stone.x >= 200 + 552 - 16:
+                    stone.x = 200 + 552 - 16
             else:
                 stone.vx += stone.get_power() / 100
                 stone.vy += stone.get_power() / 200
@@ -197,6 +199,8 @@ class Idle:
         elif left_down(e):
             if stone.is_launched == False:
                 stone.x -= 32
+                if stone.x <= 200 + 16:
+                    stone.x = 200 + 16
             else:
                 stone.vx -= stone.get_power() / 100
                 stone.vy += stone.get_power() / 200
@@ -231,7 +235,15 @@ class Idle:
             # stone.message = ''
             pass
         elif z_down(e):
+            play_mode.playing_background.view_mode = True
+            # if (stone.is_launched == False):
+            #     stone.y = 8000
             # stone.vx = 100
+            pass
+        elif z_up(e):
+            play_mode.playing_background.view_mode = False
+            # if (stone.is_launched == False):
+            #     stone.y = 500
             pass
         elif x_down(e):
             # stone.vy = 100
@@ -293,7 +305,7 @@ class Idle:
         stone.font.draw(stone.sx + stone.card_dx - 10, stone.sy + stone.card_dy, f'{stone.message}', (0, 0, 0))
         if (stone.is_launched == False):
             temp = stone.x
-            stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, stone.x - stone.radius, 0)
+            stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, stone.sx - stone.radius, 0)
             stone.powerGauge_image.clip_draw_to_origin(0 + 100 * stone.power_pointer, 0, 100, 100, stone.sx - 100, stone.sy - 50)
         else:
             stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, temp - stone.radius, 0)

@@ -17,7 +17,7 @@ def init():
     global running
     global playing_background
     global playing_stone
-    global blue_stone_1
+    # global blue_stone_1
     # global blue_stone_2, blue_stone_3
     # global red_stone_1
     # global red_stone_2
