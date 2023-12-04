@@ -10,6 +10,7 @@ import game_world
 from background import FixedBackground as background
 from math import *
 from mini_map import mini_map
+from score_pane import score_pane
 
 canvas_width = 1280
 canvas_height = 800
@@ -24,11 +25,13 @@ def init():
     # global red_stone_2
     global house_1
     global mini_map_1
+    global score_pane_1
 
     playing_stone = []
     running = True
 
     mini_map_1 = mini_map()
+    score_pane_1 = score_pane()
 
     playing_background = background()
     # blue_stone_1 = blue_stone(400, 400 - 64, 0, 0)
@@ -42,6 +45,7 @@ def init():
 
     game_world.add_object(playing_background, 0)
     game_world.add_object(mini_map_1)
+    game_world.add_object(score_pane_1)
     game_world.add_object(playing_stone[0], 3)
     # game_world.add_object(blue_stone_2, 3)
     # game_world.add_object(blue_stone_3, 3)
