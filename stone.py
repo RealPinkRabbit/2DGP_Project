@@ -359,7 +359,7 @@ class blue_stone:
     image = None
     powerGauge_image = None
     estimated_path_image = None
-    minV = 0.02
+    minV = 0.1
     vDecRate = 0.995
     slowVDecRate_1 = 0.992
     slowVDecRate_2 = 0.99
@@ -479,8 +479,12 @@ class blue_stone:
 class red_stone:
 
     image = None
-    minV = 0.02
-    vDecRate = 0.98
+    powerGauge_image = None
+    estimated_path_image = None
+    minV = 0.1
+    vDecRate = 0.995
+    slowVDecRate_1 = 0.992
+    slowVDecRate_2 = 0.99
     default_radius = 16
 
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
@@ -491,14 +495,21 @@ class red_stone:
         self.card_dx, self.card_dy = 0, 0
         self.message = ''
         self.m = 100
-        self.radius = blue_stone.default_radius
+        self.radius = red_stone.default_radius
         self.is_launched = False
+        self.is_handling = True
+        self.power = [25, 30, 35]
+        self.power_pointer = 0
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.color = 'RED'
         self.font = load_font('ENCR10B.TTF', 32)
         if (red_stone.image == None):
             red_stone.image = load_image('Stone_Red_32x32.png')
+        if (red_stone.powerGauge_image == None):
+            red_stone.powerGauge_image = load_image('Power_Gauge_300x100.png')
+        if (red_stone.estimated_path_image == None):
+            red_stone.estimated_path_image = load_image('Estimated_Path_32x5024.png')
 
     def draw(self):
         self.state_machine.draw()
@@ -511,17 +522,17 @@ class red_stone:
 
     def stone_wall_collision(self):
         if (self.x < x_min_boundary + self.radius):
-            self.x += 2 * (self.radius - (self.x - x_min_boundary))
+            self.x += 2*(self.radius - (self.x - x_min_boundary))
             self.vx *= -1
         elif (self.x > x_max_boundary - self.radius):
-            self.x -= 2 * (self.x - (x_max_boundary - self.radius))
+            self.x -= 2*(self.x - (x_max_boundary - self.radius))
             self.vx *= -1
 
         if (self.y < y_min_boundary + self.radius):
-            self.y += 2 * (self.radius - (self.y - y_min_boundary))
+            self.y += 2*(self.radius - (self.y - y_min_boundary))
             self.vy *= -1
         elif (self.y > y_max_boundary - self.radius):
-            self.y -= 2 * (self.y - (y_max_boundary - self.radius))
+            self.y -= 2*(self.y - (y_max_boundary - self.radius))
             self.vy *= -1
 
     def get_bc(self):
@@ -576,7 +587,7 @@ class red_stone:
             pass
 
     def get_power(self):
-        return sqrt(pow(self.vx, 2) + pow(self.vy, 2))
+        return sqrt(pow(self.vx, 2)+pow(self.vy, 2))
 
     def get_local_radian(self):
         mx, mv = get_unit_vector_xy(self.vx, self.vy)

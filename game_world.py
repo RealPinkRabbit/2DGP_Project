@@ -67,6 +67,7 @@ def handle_collisions():
 
 def clear():
     global collision_pairs
+    global objects
     for layer in objects:
         layer.clear()
     collision_pairs.clear()
