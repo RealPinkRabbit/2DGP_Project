@@ -37,6 +37,9 @@ def init():
     global house_1
     global mini_map_1
     global score_pane_1
+    global focus
+
+    focus = load_image('Focus_64x64.png')
 
     playing_stone = []
     running = True
@@ -135,8 +138,10 @@ def update():
     delay(0.01)
 
 def draw():
+    global playing_stone
     clear_canvas()
     game_world.render_object()
+    focus.clip_draw(0, 0, 64, 64, playing_stone[playing_stone_pointer].sx, playing_stone[playing_stone_pointer].sy)
     update_canvas()
     pass
 
