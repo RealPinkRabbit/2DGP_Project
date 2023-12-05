@@ -349,6 +349,14 @@ class Idle:
             stone.swipping_image_1.clip_draw(0, 0 + 1280 * stone.swipping_image_1_pointer, 1280, 800, stone.sx, stone.sy + stone.image_moving_pixel + 120, 270, 200)
             stone.swipping_image_2.clip_draw(0, 0 + 1280 * stone.swipping_image_2_pointer, 1280, 800, stone.sx + stone.image_moving_pixel - 90, stone.sy + 110, 270, 200)
             stone.swipping_image_2.clip_composite_draw(0, 0 + 1280 * stone.swipping_image_3_pointer, 1280, 800, 0, 'h', stone.sx - stone.image_moving_pixel + 90, stone.sy + 110, 270, 200)
+        else:
+            stone.swipping_image_1.clip_draw(0, 0 + 1280 * stone.swipping_image_1_pointer, 1280, 800, stone.sx,
+                                             stone.sy + stone.image_moving_pixel + 120, 270, 200)
+            stone.swipping_image_2.clip_draw(0, 0 + 1280 * stone.swipping_image_2_pointer, 1280, 800,
+                                             stone.sx + stone.image_moving_pixel - 90, stone.sy + 110, 270, 200)
+            stone.swipping_image_2.clip_composite_draw(0, 0 + 1280 * stone.swipping_image_3_pointer, 1280, 800, 0, 'h',
+                                                       stone.sx - stone.image_moving_pixel + 90, stone.sy + 110, 270,
+                                                       200)
         stone.image.draw(stone.sx, stone.sy)
         pass
 
