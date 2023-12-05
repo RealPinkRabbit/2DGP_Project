@@ -97,6 +97,7 @@ def update():
     global red_remained_stone
     global frame
     global waiting_count
+    global house_1
     frame = (frame + 1) % 60
     game_world.update_object()
     game_world.handle_collisions()
@@ -114,6 +115,17 @@ def update():
                             if len(playing_stone) - 1 == playing_stone_pointer:
                                 playing_stone_pointer -= 1
                             playing_stone.remove(stones)
+
+    # playing_stone 내 모든 공이 멈췄을 때, 범위를 벗어난 스톤 제거하기
+    # for pairs in game_world.objects:
+    #     for stones in pairs:
+    #         if stones.__class__.__name__ == 'blue_stone' or stones.__class__.__name__ == 'red_stone':
+    #             if stones.is_launched == True and stones.vx != 0 and stones.vy != 0:
+    #                 if stones.y < 5024 - 1304 + stones.radius:
+    #                     game_world.remove_object(stones)
+    #                     game_world.remove_collision_object(stones)
+                # elif stones.y > 5024 - 600:
+                #     pairs.clear(stones)
 
 
     # playing_stone 내 모든 공이 멈추면 다음 공 가져오기
@@ -137,6 +149,15 @@ def update():
                     playing_stone.clear()
                     red_remained_stone -= 1
                     playing_stone.append(blue_stone(200 + 552 // 2, 600, 0, 0))
+                for pairs in game_world.objects:
+                    for o in pairs:
+                        if o.__class__.__name__ == 'blue_stone' or o.__class__.__name__ == 'red_stone':
+                            if o.y < 5024 - 1304 + o.radius:
+                                game_world.remove_object(o)
+                                game_world.remove_collision_object(o)
+                            elif o.y > 5024 - 600 + o.radius and (pow(o.x - house_1.x, 2)+pow(o.y - house_1.y, 2)) > o.radius + house_1.radius:
+                                game_world.remove_object(o)
+                                game_world.remove_collision_object(o)
                 game_world.add_object(playing_stone[0], 2)
                 game_world.add_collision_pair('house:stone', None, playing_stone[0])
                 game_world.add_collision_pair('stone:stone', playing_stone[0], playing_stone[0])
