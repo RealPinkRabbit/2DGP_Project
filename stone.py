@@ -235,22 +235,34 @@ class Idle:
             # stone.message = ''
             pass
         elif z_down(e):
-            play_mode.playing_background.view_mode = True
+            pass
         elif z_up(e):
-            play_mode.playing_background.view_mode = False
+            pass
         elif x_down(e):
             # stone.vy = 100
             pass
         elif w_down(e):
+            play_mode.playing_background.view_mode = True
             # stone.vy = 5
             pass
+        elif w_up(e):
+            play_mode.playing_background.view_mode = False
+            pass
         elif a_down(e):
+            if stone.message != '':
+                stone.message = ''
+            if play_mode.playing_stone_pointer > 0:
+                play_mode.playing_stone_pointer -= 1
             # stone.vx = -5
             pass
         elif s_down(e):
             # stone.vy = -5
             pass
         elif d_down(e):
+            if stone.message != '':
+                stone.message = ''
+            if play_mode.playing_stone_pointer < len(play_mode.playing_stone)-1:
+                play_mode.playing_stone_pointer += 1
             # stone.vx = 5
             pass
         elif r_down(e):
