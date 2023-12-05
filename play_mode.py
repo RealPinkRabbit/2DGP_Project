@@ -157,7 +157,7 @@ def update():
                             if o.y < 5024 - 1304 + o.radius:
                                 game_world.remove_object(o)
                                 game_world.remove_collision_object(o)
-                            elif o.y > 5024 - 600 + o.radius and (pow(o.x - house_1.x, 2)+pow(o.y - house_1.y, 2)) > o.radius + house_1.radius:
+                            elif (o.y > 5024 - 600 + o.radius) and (pow(o.x - house_1.x, 2)+pow(o.y - house_1.y, 2)) > pow(o.radius + house_1.radius, 2):
                                 game_world.remove_object(o)
                                 game_world.remove_collision_object(o)
                 game_world.add_object(playing_stone[0], 2)

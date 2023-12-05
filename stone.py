@@ -349,6 +349,10 @@ class Idle:
                 stone.swipping_image_3_pointer = 1
                 stone.is_swipping = False
 
+        if stone.y > 5024 + stone.radius:
+            stone.vx = 0
+            stone.vy = 0
+
         if stone.vx >= 6:
             stone.vx *= stone.vDecRate
         elif stone.vx >= 3:
