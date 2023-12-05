@@ -26,6 +26,7 @@ playing_stone_pointer = 0
 moved_stone = []
 first_attack = 'BLUE'
 playing_background = None
+frame = 0
 
 
 def init():
@@ -83,6 +84,8 @@ def update():
     global playing_stone_pointer
     global blue_remained_stone
     global red_remained_stone
+    global frame
+    frame = (frame + 1) % 60
     game_world.update_object()
     game_world.handle_collisions()
     # playing_stone에 의해 움직이고 있는 공을 실시간으로 추가

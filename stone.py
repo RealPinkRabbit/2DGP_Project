@@ -193,9 +193,13 @@ class Idle:
             else:
                 stone.vx += stone.get_power() / 100
                 stone.vy += stone.get_power() / 200
-                stone.card_dx = 50
-                stone.card_dy = 0
-                stone.message = 'R'
+                if stone.is_swipping == False:
+                    stone.is_swipping = True
+                    stone.swipped_frame = (play_mode.frame) % 30
+                    stone.swipping_image_3_pointer = 0
+                # stone.card_dx = 50
+                # stone.card_dy = 0
+                # stone.message = 'R'
         elif left_down(e):
             if stone.is_launched == False:
                 stone.x -= 32
@@ -204,18 +208,26 @@ class Idle:
             else:
                 stone.vx -= stone.get_power() / 100
                 stone.vy += stone.get_power() / 200
-                stone.card_dx = -50
-                stone.card_dy = 0
-                stone.message = 'L'
+                if stone.is_swipping == False:
+                    stone.is_swipping = True
+                    stone.swipped_frame = (play_mode.frame) % 30
+                    stone.swipping_image_2_pointer = 0
+                # stone.card_dx = -50
+                # stone.card_dy = 0
+                # stone.message = 'L'
         elif up_down(e):
             if stone.is_launched == False:
                 if stone.power_pointer < 2:
                     stone.power_pointer += 1
             else:
                 stone.vy += stone.get_power() / 100
-                stone.card_dx = 0
-                stone.card_dy = 50
-                stone.message = 'U'
+                if stone.is_swipping == False:
+                    stone.is_swipping = True
+                    stone.swipped_frame = (play_mode.frame) % 30
+                    stone.swipping_image_1_pointer = 0
+                # stone.card_dx = 0
+                # stone.card_dy = 50
+                # stone.message = 'U'
         elif down_down(e):
             if stone.is_launched == False:
                 if stone.power_pointer > 0:
@@ -226,11 +238,15 @@ class Idle:
             # stone.message = 'D'
             pass
         elif right_up(e):
-            stone.message = ''
+            # stone.message = ''
+            pass
         elif left_up(e):
-            stone.message = ''
+            stone.swipping_image_1_pointer = 1
+            # stone.message = ''
+            pass
         elif up_up(e):
-            stone.message = ''
+            # stone.message = ''
+            pass
         elif down_up(e):
             # stone.message = ''
             pass
@@ -249,8 +265,8 @@ class Idle:
             play_mode.playing_background.view_mode = False
             pass
         elif a_down(e):
-            if stone.message != '':
-                stone.message = ''
+            # if stone.message != '':
+            #     stone.message = ''
             if play_mode.playing_stone_pointer > 0:
                 play_mode.playing_stone_pointer -= 1
             # stone.vx = -5
@@ -259,8 +275,8 @@ class Idle:
             # stone.vy = -5
             pass
         elif d_down(e):
-            if stone.message != '':
-                stone.message = ''
+            # if stone.message != '':
+            #     stone.message = ''
             if play_mode.playing_stone_pointer < len(play_mode.playing_stone)-1:
                 play_mode.playing_stone_pointer += 1
             # stone.vx = 5
@@ -279,12 +295,28 @@ class Idle:
 
     @staticmethod
     def do(stone):
+        global frame
         stone.x += stone.vx * game_framework.frame_time * RUN_SPEED_PPS
         stone.y += stone.vy * game_framework.frame_time * RUN_SPEED_PPS
         stone.sx = stone.x - play_mode.playing_background.window_left
         stone.sy = stone.y - play_mode.playing_background.window_bottom
 
         stone.stone_wall_collision()
+
+        if stone.is_swipping == True:
+            if (play_mode.frame - stone.swipped_frame) % 30 < 8:
+                stone.image_moving_pixel = 30
+            elif (play_mode.frame - stone.swipped_frame) % 30 < 15:
+                stone.image_moving_pixel = 0
+            elif (play_mode.frame - stone.swipped_frame) % 30 < 23:
+                stone.image_moving_pixel = 30
+            elif (play_mode.frame - stone.swipped_frame) % 30 < 30:
+                stone.image_moving_pixel = 0
+            if stone.swipped_frame == play_mode.frame:
+                stone.swipping_image_1_pointer = 1
+                stone.swipping_image_2_pointer = 1
+                stone.swipping_image_3_pointer = 1
+                stone.is_swipping = False
 
         if stone.vx >= 6:
             stone.vx *= stone.vDecRate
@@ -307,13 +339,16 @@ class Idle:
     @staticmethod
     def draw(stone):
         global temp
-        stone.font.draw(stone.sx + stone.card_dx - 10, stone.sy + stone.card_dy, f'{stone.message}', (0, 0, 0))
+        # stone.font.draw(stone.sx + stone.card_dx - 10, stone.sy + stone.card_dy, f'{stone.message}', (0, 0, 0))
         if (stone.is_launched == False):
             temp = stone.x
             stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, stone.sx - stone.radius, 0)
             stone.powerGauge_image.clip_draw_to_origin(0 + 100 * stone.power_pointer, 0, 100, 100, stone.sx - 100, stone.sy - 50)
         elif stone.is_handling == True:
             stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, temp - stone.radius, 0)
+            stone.swipping_image_1.clip_draw(0, 0 + 1280 * stone.swipping_image_1_pointer, 1280, 800, stone.sx, stone.sy + stone.image_moving_pixel, 270, 200)
+            stone.swipping_image_2.clip_draw(0, 0 + 1280 * stone.swipping_image_2_pointer, 1280, 800, stone.sx + stone.image_moving_pixel, stone.sy, 270, 200)
+            stone.swipping_image_2.clip_composite_draw(0, 0 + 1280 * stone.swipping_image_3_pointer, 1280, 800, 0, 'h', stone.sx - stone.image_moving_pixel, stone.sy, 270, 200)
         stone.image.draw(stone.sx, stone.sy)
         pass
 
@@ -359,6 +394,8 @@ class blue_stone:
     image = None
     powerGauge_image = None
     estimated_path_image = None
+    swipping_image_1 = None
+    swipping_image_2 = None
     minV = 0.1
     vDecRate = 0.995
     slowVDecRate_1 = 0.992
@@ -376,8 +413,14 @@ class blue_stone:
         self.radius = blue_stone.default_radius
         self.is_launched = False
         self.is_handling = True
+        self.is_swipping = False
+        self.swipped_frame = 0
+        self.image_moving_pixel = 0
         self.power = [25, 30, 35]
         self.power_pointer = 0
+        self.swipping_image_1_pointer = 1
+        self.swipping_image_2_pointer = 1
+        self.swipping_image_3_pointer = 1
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.color = 'BLUE'
@@ -388,6 +431,10 @@ class blue_stone:
             blue_stone.powerGauge_image = load_image('Power_Gauge_300x100.png')
         if (blue_stone.estimated_path_image == None):
             blue_stone.estimated_path_image = load_image('Estimated_Path_32x5024.png')
+        if (blue_stone.swipping_image_1 == None):
+            blue_stone.swipping_image_1 = load_image('Duck_Swipping_1_1280x800.png')
+        if (blue_stone.swipping_image_2 == None):
+            blue_stone.swipping_image_2 = load_image('Duck_Swipping_2_1280x800.png')
 
     def draw(self):
         self.state_machine.draw()
@@ -481,6 +528,8 @@ class red_stone:
     image = None
     powerGauge_image = None
     estimated_path_image = None
+    swipping_image_1 = None
+    swipping_image_2 = None
     minV = 0.1
     vDecRate = 0.995
     slowVDecRate_1 = 0.992
@@ -498,8 +547,14 @@ class red_stone:
         self.radius = red_stone.default_radius
         self.is_launched = False
         self.is_handling = True
+        self.is_swipping = False
+        self.swipped_frame = 0
+        self.image_moving_pixel = 0
         self.power = [25, 30, 35]
         self.power_pointer = 0
+        self.swipping_image_1_pointer = 1
+        self.swipping_image_2_pointer = 1
+        self.swipping_image_3_pointer = 1
         self.state_machine = StateMachine(self)
         self.state_machine.start()
         self.color = 'RED'
@@ -510,6 +565,10 @@ class red_stone:
             red_stone.powerGauge_image = load_image('Power_Gauge_300x100.png')
         if (red_stone.estimated_path_image == None):
             red_stone.estimated_path_image = load_image('Estimated_Path_32x5024.png')
+        if (red_stone.swipping_image_1 == None):
+            red_stone.swipping_image_1 = load_image('Cat_Swipping_1_1280x800.png')
+        if (red_stone.swipping_image_2 == None):
+            red_stone.swipping_image_2 = load_image('Cat_Swipping_2_1280x800.png')
 
     def draw(self):
         self.state_machine.draw()
