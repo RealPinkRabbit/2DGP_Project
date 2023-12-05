@@ -26,17 +26,21 @@ def finish():
     del resume_image
     del quit_image
 
+
 def update():
     pass
+
 
 def draw():
     clear_canvas()
     game_world.render_object()
-    play_mode.focus.clip_draw(0, 0, 64, 64, play_mode.playing_stone[play_mode.playing_stone_pointer].sx, play_mode.playing_stone[play_mode.playing_stone_pointer].sy)
+    play_mode.focus.clip_draw(0, 0, 64, 64, play_mode.playing_stone[play_mode.playing_stone_pointer].sx,
+                              play_mode.playing_stone[play_mode.playing_stone_pointer].sy)
     pause_image.clip_draw_to_origin(0, 0, 1280, 800, 0, 0)
     resume_image.clip_draw_to_origin(0, 0 + 80 * Act_Button_1, 384, 80, 640 - 384 // 2, 350 - 80 // 2)
     quit_image.clip_draw_to_origin(0, 0 + 80 * Act_Button_2, 256, 80, 640 - 256 // 2, 200 - 80 // 2)
     update_canvas()
+
 
 def handle_events():
     global Act_Button_1, Act_Button_2
@@ -48,7 +52,7 @@ def handle_events():
             play_mode.playing_background.bgm.set_volume(32)
             game_framework.pop_mode()
         elif event.type == SDL_MOUSEMOTION or event.type == SDL_MOUSEBUTTONDOWN or event.type == SDL_MOUSEBUTTONUP:
-            if event.x >= 640 - 384//2 and event.x <= 640 - 384//2 + 384 and 800 - 1 - event.y >= 350 - 80//2 and 800 - 1 - event.y <= 350 - 80//2 + 80:
+            if event.x >= 640 - 384 // 2 and event.x <= 640 - 384 // 2 + 384 and 800 - 1 - event.y >= 350 - 80 // 2 and 800 - 1 - event.y <= 350 - 80 // 2 + 80:
                 if event.type == SDL_MOUSEBUTTONDOWN:
                     Act_Button_1 = 2
                 else:
@@ -58,7 +62,7 @@ def handle_events():
                     game_framework.pop_mode()
             else:
                 Act_Button_1 = 0
-            if event.x >= 640 - 256//2 and event.x <= 640 - 256//2 + 256 and 800 - 1 - event.y >= 200 - 80//2 and 800 - 1 - event.y <= 200 - 80//2 + 80:
+            if event.x >= 640 - 256 // 2 and event.x <= 640 - 256 // 2 + 256 and 800 - 1 - event.y >= 200 - 80 // 2 and 800 - 1 - event.y <= 200 - 80 // 2 + 80:
                 if event.type == SDL_MOUSEBUTTONDOWN:
                     Act_Button_2 = 2
                 else:
@@ -71,8 +75,10 @@ def handle_events():
             else:
                 Act_Button_2 = 0
 
+
 def pause():
     pass
+
 
 def resume():
     pass

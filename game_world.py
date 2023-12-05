@@ -2,13 +2,15 @@
 # update()함수, draw()함수를 꼭 가져야 함
 from math import pow
 
-objects = [ [] for _ in range(5) ] # 시각 월드
-collision_pairs = {} # 충돌 월드
+objects = [[] for _ in range(5)]  # 시각 월드
+collision_pairs = {}  # 충돌 월드
 
-def add_object(o, depth = 0):
+
+def add_object(o, depth=0):
     objects[depth].append(o)
 
-def change_depth(o, changed_depth = 0):
+
+def change_depth(o, changed_depth=0):
     remove_object(o)
     objects[changed_depth].append(o)
 
@@ -28,31 +30,37 @@ def remove_object(o):
             return
     raise ValueError('Canont delete non existing object')
 
+
 def update_object():
     for layer in objects:
         for o in layer:
             o.update()
+
+
 def render_object():
     for layer in objects:
         for o in layer:
             o.draw()
 
+
 def collide(a, b):
     a_x, a_y, a_rad = a.get_bc()
     b_x, b_y, b_rad = b.get_bc()
 
-    if (pow(a_x-b_x,2)+pow(a_y-b_y,2) > pow(a_rad+b_rad,2)):
+    if (pow(a_x - b_x, 2) + pow(a_y - b_y, 2) > pow(a_rad + b_rad, 2)):
         return False
     return True
+
 
 def add_collision_pair(group, a, b):
     if group not in collision_pairs:
         # print(f'Added new group {group}')
-        collision_pairs[group] = [ [], [] ]
+        collision_pairs[group] = [[], []]
     if a:
         collision_pairs[group][0].append(a)
     if b:
         collision_pairs[group][1].append(b)
+
 
 def handle_collisions():
     for group, pairs in collision_pairs.items():
@@ -64,6 +72,7 @@ def handle_collisions():
                         continue
                     a.handle_collision(group, b)
                     b.handle_collision(group, a)
+
 
 def clear():
     global collision_pairs

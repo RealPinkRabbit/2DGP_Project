@@ -2,6 +2,7 @@ from pico2d import *
 
 import play_mode
 
+
 class mini_map:
     image = None
 
@@ -11,7 +12,7 @@ class mini_map:
             mini_map.image = load_image('Mini_Field_82x750.png')
 
     def draw(self):
-        self.image.clip_draw_to_origin(0, 0, 82, 750, 100 - 82//2, 25)
+        self.image.clip_draw_to_origin(0, 0, 82, 750, 100 - 82 // 2, 25)
         # self.image.draw(self.sx, self.sy)
         # self.font.draw(self.sx - 170, self.sy + 250, f'{self.score_color} : {self.score}', self.RGB)
         pass

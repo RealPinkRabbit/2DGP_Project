@@ -19,8 +19,10 @@ def finish():
     del result_image
     del result_pane_image
 
+
 def update():
     pass
+
 
 def draw():
     clear_canvas()
@@ -28,6 +30,7 @@ def draw():
     result_pane_image.draw(640, 400)
     update_canvas()
     pass
+
 
 def handle_events():
     global Act_Button_1, Act_Button_2
@@ -38,8 +41,10 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.change_mode(title_mode)
 
+
 def pause():
     pass
+
 
 def resume():
     pass

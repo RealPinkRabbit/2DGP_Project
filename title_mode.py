@@ -31,8 +31,10 @@ def finish():
     del start_image
     del method_image
 
+
 def update():
     pass
+
 
 def draw():
     clear_canvas()
@@ -42,6 +44,7 @@ def draw():
     method_image.clip_draw_to_origin(0, 0 + 128 * Act_Button_2, 320, 128, 1280 - 350, 50)
     update_canvas()
     pass
+
 
 def handle_events():
     global Act_Button_1, Act_Button_2
@@ -76,8 +79,10 @@ def handle_events():
             else:
                 Act_Button_2 = 0
 
+
 def pause():
     pass
+
 
 def resume():
     pass
