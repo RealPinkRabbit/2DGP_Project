@@ -346,9 +346,9 @@ class Idle:
             stone.powerGauge_image.clip_draw_to_origin(0 + 100 * stone.power_pointer, 0, 100, 100, stone.sx - 100, stone.sy - 50)
         elif stone.is_handling == True:
             stone.estimated_path_image.clip_draw_to_origin(0, 0, 32, 5024, temp - stone.radius, 0)
-            stone.swipping_image_1.clip_draw(0, 0 + 1280 * stone.swipping_image_1_pointer, 1280, 800, stone.sx, stone.sy + stone.image_moving_pixel, 270, 200)
-            stone.swipping_image_2.clip_draw(0, 0 + 1280 * stone.swipping_image_2_pointer, 1280, 800, stone.sx + stone.image_moving_pixel, stone.sy, 270, 200)
-            stone.swipping_image_2.clip_composite_draw(0, 0 + 1280 * stone.swipping_image_3_pointer, 1280, 800, 0, 'h', stone.sx - stone.image_moving_pixel, stone.sy, 270, 200)
+            stone.swipping_image_1.clip_draw(0, 0 + 1280 * stone.swipping_image_1_pointer, 1280, 800, stone.sx, stone.sy + stone.image_moving_pixel + 120, 270, 200)
+            stone.swipping_image_2.clip_draw(0, 0 + 1280 * stone.swipping_image_2_pointer, 1280, 800, stone.sx + stone.image_moving_pixel - 90, stone.sy + 110, 270, 200)
+            stone.swipping_image_2.clip_composite_draw(0, 0 + 1280 * stone.swipping_image_3_pointer, 1280, 800, 0, 'h', stone.sx - stone.image_moving_pixel + 90, stone.sy + 110, 270, 200)
         stone.image.draw(stone.sx, stone.sy)
         pass
 
@@ -396,10 +396,10 @@ class blue_stone:
     estimated_path_image = None
     swipping_image_1 = None
     swipping_image_2 = None
-    minV = 0.1
+    minV = 0.02
     vDecRate = 0.995
-    slowVDecRate_1 = 0.992
-    slowVDecRate_2 = 0.99
+    slowVDecRate_1 = 0.99
+    slowVDecRate_2 = 0.98
     default_radius = 16
 
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
@@ -530,10 +530,10 @@ class red_stone:
     estimated_path_image = None
     swipping_image_1 = None
     swipping_image_2 = None
-    minV = 0.1
+    minV = 0.02
     vDecRate = 0.995
-    slowVDecRate_1 = 0.992
-    slowVDecRate_2 = 0.99
+    slowVDecRate_1 = 0.99
+    slowVDecRate_2 = 0.98
     default_radius = 16
 
     def __init__(self, x = 100, y = 100, vx = 0, vy = 0):
