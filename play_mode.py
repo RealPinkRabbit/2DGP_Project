@@ -80,6 +80,19 @@ def update():
     global playing_stone
     game_world.update_object()
     game_world.handle_collisions()
+    # playing_stone에 의해 움직이고 있는 공을 실시간으로 추가
+    for pairs in game_world.objects:
+        for stones in pairs:
+            if stones.__class__.__name__ == 'blue_stone' or stones.__class__.__name__ == 'red_stone':
+                if stones.is_launched == True and stones.is_handling == False:
+                    if stones not in playing_stone:
+                        if (stones.vx != 0 or stones.vy != 0) and stones.y >= 5024-600:
+                            playing_stone.append(stones)
+                    else:
+                        if stones.vx == 0 and stones.vy == 0:
+                            playing_stone.remove(stones)
+    print(playing_stone)
+    # playing_stone 내 모든 공이 멈추면 다음 공 가져오기
     for stones in playing_stone:
         if stones.vx == 0 and stones.vy == 0 and stones.is_launched == True:
             for pairs in game_world.objects:
