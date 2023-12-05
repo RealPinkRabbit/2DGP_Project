@@ -34,10 +34,10 @@ class FixedBackground:
         self.image.clip_draw_to_origin(self.window_left, self.window_bottom, self.cw, self.ch, 0, 0)
 
     def update(self):
-        self.window_left = int(play_mode.playing_stone[0].x) - self.cw // 2
-        self.window_bottom = int(play_mode.playing_stone[0].y) - self.ch // 2
-        self.window_left = clamp(0, int(play_mode.playing_stone[0].x) - self.cw // 2, self.w - self.cw - 1)
+        self.window_left = int(play_mode.playing_stone[play_mode.playing_stone_pointer].x) - self.cw // 2
+        self.window_bottom = int(play_mode.playing_stone[play_mode.playing_stone_pointer].y) - self.ch // 2
+        self.window_left = clamp(0, int(play_mode.playing_stone[play_mode.playing_stone_pointer].x) - self.cw // 2, self.w - self.cw - 1)
         if (self.view_mode == False):
-            self.window_bottom = clamp(0, int(play_mode.playing_stone[0].y) - self.ch // 2 + 200, self.h - self.ch - 1)
+            self.window_bottom = clamp(0, int(play_mode.playing_stone[play_mode.playing_stone_pointer].y) - self.ch // 2 + 200, self.h - self.ch - 1)
         else:
             self.window_bottom = 5024 - 250 - 800 - 1
