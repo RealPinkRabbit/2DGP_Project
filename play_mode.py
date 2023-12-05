@@ -17,8 +17,8 @@ canvas_height = 800
 
 current_end = 1
 total_end = 4
-blue_remained_stone = 1
-red_remained_stone = 1
+blue_remained_stone = 8
+red_remained_stone = 8
 blue_score = [0, 0, 0, 0, 0, 0]
 red_score = [0, 0, 0, 0, 0, 0]
 playing_stone = []  # moving stone
@@ -187,6 +187,7 @@ def reset_end():
     global first_attack
     blue_remained_stone = 8
     red_remained_stone = 8
+
     # 점수 책정
     if house_1.score_color == 'BLUE':
         blue_score[current_end - 1] = house_1.score
