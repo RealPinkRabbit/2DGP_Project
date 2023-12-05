@@ -16,7 +16,7 @@ canvas_width = 1280
 canvas_height = 800
 
 current_end = 1
-total_end = 6
+total_end = 4
 blue_remained_stone = 1
 red_remained_stone = 1
 blue_score = [0, 0, 0, 0, 0, 0]
@@ -48,7 +48,10 @@ def init():
     score_pane_1 = score_pane()
 
     playing_background = background()
-    playing_stone.append(blue_stone(200 + 552 // 2, 600, 0, 0))
+    if first_attack == 'BLUE':
+        playing_stone.append(blue_stone(200 + 552 // 2, 600, 0, 0))
+    elif first_attack == 'RED':
+        playing_stone.append(red_stone(200 + 552 // 2, 600, 0, 0))
     house_1 = house()
 
     game_world.add_object(playing_background, 0)
@@ -97,6 +100,7 @@ def update():
     frame = (frame + 1) % 60
     game_world.update_object()
     game_world.handle_collisions()
+
     # playing_stone에 의해 움직이고 있는 공을 실시간으로 추가
     for pairs in game_world.objects:
         for stones in pairs:
@@ -110,11 +114,14 @@ def update():
                             if len(playing_stone) - 1 == playing_stone_pointer:
                                 playing_stone_pointer -= 1
                             playing_stone.remove(stones)
+
+
     # playing_stone 내 모든 공이 멈추면 다음 공 가져오기
     for stones in playing_stone:
         if stones.vx == 0 and stones.vy == 0 and stones.is_launched == True:
             waiting_count += 1
             if waiting_count == 5:
+                # 모든 공이 멈추면, 다음 실행
                 waiting_count = 0
                 for pairs in game_world.objects:
                     for o in pairs:
@@ -135,11 +142,15 @@ def update():
                 game_world.add_collision_pair('stone:stone', playing_stone[0], playing_stone[0])
         else:
             waiting_count = 0
+
     # 엔드가 끝났다면, 다음 엔드로 넘어가기
     if check_finished_end() == True:
         reset_end()
     delay(0.01)
 
+    # 게임이 끝났다면, 결과창으로 이동
+    if check_finished_game() == True:
+        game_framework.change_mode(result_mode)
 
 def draw():
     global playing_stone
@@ -161,7 +172,7 @@ def resume():
 def check_finished_end():
     global blue_remained_stone
     global red_remained_stone
-    if blue_remained_stone == 0 and red_remained_stone == 0:
+    if blue_remained_stone <= 0 and red_remained_stone <= 0:
         return True
     return False
 
@@ -182,24 +193,37 @@ def reset_end():
     elif house_1.score_color == 'RED':
         red_score[current_end - 1] = house_1.score
     current_end += 1
-    # print(blue_score)
-    # print(red_score)
+    print(current_end)
+    print(blue_score)
+    print(red_score)
 
     # 게임월드 돌 삭제
-    for pairs in game_world.objects:
-        for stones in pairs:
-            if stones.__class__.__name__ == 'blue_stone' or stones.__class__.__name__ == 'red_stone':
-                game_world.remove_object(stones)
-                game_world.remove_collision_object(stones)
+    # for pairs in game_world.objects:
+    #     for stones in pairs:
+    #          if stones.__class__.__name__ == 'blue_stone' or stones.__class__.__name__ == 'red_stone':
+    #             game_world.remove_object(stones)
+    #             game_world.remove_collision_object(stones)
+    game_world.objects[2].clear()
+    game_world.objects[3].clear()
+    del game_world.collision_pairs['stone:stone']
+    game_world.add_collision_pair('stone:stone', None, None)
+
+    print(game_world.objects)
+    print(game_world.collision_pairs)
     playing_stone.clear()
     if first_attack == 'BLUE':
         first_attack = 'RED'
         playing_stone.append(red_stone(200 + 552 // 2, 600, 0, 0))
     elif first_attack == 'RED':
         first_attack = 'BLUE'
-        playing_stone.append(red_stone(200 + 552 // 2, 600, 0, 0))
+        playing_stone.append(blue_stone(200 + 552 // 2, 600, 0, 0))
     game_world.add_object(playing_stone[0], 2)
     game_world.add_collision_pair('house:stone', None, playing_stone[0])
     game_world.add_collision_pair('stone:stone', playing_stone[0], playing_stone[0])
 
     pass
+
+def check_finished_game():
+    if current_end > total_end:
+        return True
+    return False

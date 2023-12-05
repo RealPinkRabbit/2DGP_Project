@@ -312,6 +312,7 @@ class Idle:
             # stone.vx = 5
             pass
         elif r_down(e):
+            stone.vx, stone.vy = 0, 0
             # stone.x = 400
             # stone.y = 400
             # stone.vx = 0
@@ -454,6 +455,7 @@ class blue_stone:
         self.message = ''
         self.m = 100
         self.radius = blue_stone.default_radius
+        self.character = 'DUCK'
         self.is_launched = False
         self.is_handling = True
         self.is_swipping = False
@@ -475,9 +477,15 @@ class blue_stone:
         if (blue_stone.estimated_path_image == None):
             blue_stone.estimated_path_image = load_image('Estimated_Path_32x5024.png')
         if (blue_stone.swipping_image_1 == None):
-            blue_stone.swipping_image_1 = load_image('Duck_Swipping_1_1280x800.png')
+            if self.character == 'DUCK':
+                blue_stone.swipping_image_1 = load_image('Duck_Swipping_1_1280x800.png')
+            elif self.character == 'CAT':
+                blue_stone.swipping_image_1 = load_image('Cat_Swipping_1_1280x800.png')
         if (blue_stone.swipping_image_2 == None):
-            blue_stone.swipping_image_2 = load_image('Duck_Swipping_2_1280x800.png')
+            if self.character == 'DUCK':
+                blue_stone.swipping_image_2 = load_image('Duck_Swipping_2_1280x800.png')
+            elif self.character == 'CAT':
+                blue_stone.swipping_image_2 = load_image('Cat_Swipping_2_1280x800.png')
 
     def draw(self):
         self.state_machine.draw()
@@ -587,6 +595,7 @@ class red_stone:
         self.message = ''
         self.m = 100
         self.radius = red_stone.default_radius
+        self.character = 'CAT'
         self.is_launched = False
         self.is_handling = True
         self.is_swipping = False
@@ -608,9 +617,15 @@ class red_stone:
         if (red_stone.estimated_path_image == None):
             red_stone.estimated_path_image = load_image('Estimated_Path_32x5024.png')
         if (red_stone.swipping_image_1 == None):
-            red_stone.swipping_image_1 = load_image('Cat_Swipping_1_1280x800.png')
+            if self.character == 'DUCK':
+                red_stone.swipping_image_1 = load_image('Duck_Swipping_1_1280x800.png')
+            elif self.character == 'CAT':
+                red_stone.swipping_image_1 = load_image('Cat_Swipping_1_1280x800.png')
         if (red_stone.swipping_image_2 == None):
-            red_stone.swipping_image_2 = load_image('Cat_Swipping_2_1280x800.png')
+            if self.character == 'DUCK':
+                red_stone.swipping_image_2 = load_image('Duck_Swipping_2_1280x800.png')
+            elif self.character == 'CAT':
+                red_stone.swipping_image_2 = load_image('Cat_Swipping_2_1280x800.png')
 
     def draw(self):
         self.state_machine.draw()
