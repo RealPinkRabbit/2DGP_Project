@@ -101,7 +101,8 @@ def update():
     frame = (frame + 1) % 60
     game_world.update_object()
     game_world.handle_collisions()
-
+    if len(moved_stone) == 0:
+        moved_stone.append(playing_stone[0])
     # playing_stone에 의해 움직이고 있는 공을 실시간으로 추가
     for pairs in game_world.objects:
         for stones in pairs:
@@ -110,23 +111,12 @@ def update():
                     if stones not in playing_stone:
                         if stones.vx != 0 or stones.vy != 0:
                             playing_stone.append(stones)
+                            moved_stone.append(stones)
                     else:
                         if stones.vx == 0 and stones.vy == 0:
                             if len(playing_stone) - 1 == playing_stone_pointer:
                                 playing_stone_pointer -= 1
                             playing_stone.remove(stones)
-
-    # playing_stone 내 모든 공이 멈췄을 때, 범위를 벗어난 스톤 제거하기
-    # for pairs in game_world.objects:
-    #     for stones in pairs:
-    #         if stones.__class__.__name__ == 'blue_stone' or stones.__class__.__name__ == 'red_stone':
-    #             if stones.is_launched == True and stones.vx != 0 and stones.vy != 0:
-    #                 if stones.y < 5024 - 1304 + stones.radius:
-    #                     game_world.remove_object(stones)
-    #                     game_world.remove_collision_object(stones)
-                # elif stones.y > 5024 - 600:
-                #     pairs.clear(stones)
-
 
     # playing_stone 내 모든 공이 멈추면 다음 공 가져오기
     for stones in playing_stone:
@@ -149,6 +139,10 @@ def update():
                     playing_stone.clear()
                     red_remained_stone -= 1
                     playing_stone.append(blue_stone(200 + 552 // 2, 600, 0, 0))
+                print(moved_stone)
+                moved_stone.clear()
+                print(moved_stone)
+                # 스톤이 지정된 범위를 벗어난 곳에 안착 시, 스톤 제거
                 for pairs in game_world.objects:
                     for o in pairs:
                         if o.__class__.__name__ == 'blue_stone' or o.__class__.__name__ == 'red_stone':
