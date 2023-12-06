@@ -312,7 +312,7 @@ class Idle:
             # stone.vx = 5
             pass
         elif r_down(e):
-            stone.vx, stone.vy = 0, 0
+            # stone.vx, stone.vy = 0, 0
             # stone.x = 400
             # stone.y = 400
             # stone.vx = 0

@@ -5,6 +5,7 @@ import pause_mode
 import result_mode
 import title_mode
 from event_pane import event_pane
+from focus import focus
 from stone import blue_stone, red_stone
 from house import house
 import game_world
@@ -16,7 +17,7 @@ from score_pane import score_pane
 canvas_width = 1280
 canvas_height = 800
 
-current_end = 6
+current_end = 1
 total_end = 6
 blue_remained_stone = 1
 red_remained_stone = 1
@@ -39,9 +40,11 @@ def init():
     global mini_map_1
     global score_pane_1
     global event_pane_1
-    global focus
+    # global focus
+    global focus_1
 
-    focus = load_image('Focus_64x64.png')
+    # focus = load_image('Focus_64x64.png')
+    focus_1 = focus()
 
     playing_stone = []
     running = True
@@ -63,6 +66,7 @@ def init():
     game_world.add_object(playing_stone[0], 2)
     game_world.add_object(house_1, 1)
     game_world.add_object(event_pane_1, 5)
+    game_world.add_object(focus_1, 2)
 
     event_pane_1.message = '경기 시작'
     event_pane_1.RGB = (255, 255, 0)
@@ -205,7 +209,6 @@ def draw():
     global playing_stone
     clear_canvas()
     game_world.render_object()
-    focus.clip_draw(0, 0, 64, 64, playing_stone[playing_stone_pointer].sx, playing_stone[playing_stone_pointer].sy)
     update_canvas()
     pass
 
