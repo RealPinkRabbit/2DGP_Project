@@ -2,7 +2,7 @@
 # update()함수, draw()함수를 꼭 가져야 함
 from math import pow
 
-objects = [[] for _ in range(5)]  # 시각 월드
+objects = [[] for _ in range(6)]  # 시각 월드
 collision_pairs = {}  # 충돌 월드
 
 

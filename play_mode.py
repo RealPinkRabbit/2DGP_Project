@@ -4,6 +4,7 @@ import game_framework
 import pause_mode
 import result_mode
 import title_mode
+from event_pane import event_pane
 from stone import blue_stone, red_stone
 from house import house
 import game_world
@@ -15,10 +16,10 @@ from score_pane import score_pane
 canvas_width = 1280
 canvas_height = 800
 
-current_end = 1
+current_end = 6
 total_end = 6
-blue_remained_stone = 8
-red_remained_stone = 8
+blue_remained_stone = 1
+red_remained_stone = 1
 blue_score = [0, 0, 0, 0, 0, 0]
 red_score = [0, 0, 0, 0, 0, 0]
 playing_stone = []  # moving stone
@@ -37,6 +38,7 @@ def init():
     global house_1
     global mini_map_1
     global score_pane_1
+    global event_pane_1
     global focus
 
     focus = load_image('Focus_64x64.png')
@@ -46,6 +48,7 @@ def init():
 
     mini_map_1 = mini_map()
     score_pane_1 = score_pane()
+    event_pane_1 = event_pane()
 
     playing_background = background()
     if first_attack == 'BLUE':
@@ -59,6 +62,11 @@ def init():
     game_world.add_object(score_pane_1, 4)
     game_world.add_object(playing_stone[0], 2)
     game_world.add_object(house_1, 1)
+    game_world.add_object(event_pane_1, 5)
+
+    event_pane_1.message = '경기 시작'
+    event_pane_1.RGB = (255, 255, 0)
+    event_pane_1.is_presenting = True
 
     game_world.add_collision_pair('house:stone', house_1, playing_stone[0])
     game_world.add_collision_pair('stone:stone', playing_stone[0], playing_stone[0])
@@ -98,6 +106,11 @@ def update():
     global frame
     global waiting_count
     global house_1
+    global event_pane_1
+    if event_pane_1.message == '경기 시작' and event_pane_1.is_presenting == False:
+        event_pane_1.RGB = (255, 255, 255)
+        event_pane_1.message = '1 엔드'
+        event_pane_1.is_presenting = True
     frame = (frame + 1) % 60
     game_world.update_object()
     game_world.handle_collisions()
@@ -156,10 +169,10 @@ def update():
                 for pairs in game_world.objects:
                     for o in pairs:
                         if o.__class__.__name__ == 'blue_stone' or o.__class__.__name__ == 'red_stone':
-                            if o.y < 5024 - 1304 + o.radius:
+                            if o.y < 5024 - 1304:
                                 game_world.remove_object(o)
                                 game_world.remove_collision_object(o)
-                            elif (o.y > 5024 - 600 + o.radius) and (pow(o.x - house_1.x, 2)+pow(o.y - house_1.y, 2)) > pow(o.radius + house_1.radius, 2):
+                            elif (o.y > 5024 - 600) and (pow(o.x - house_1.x, 2)+pow(o.y - house_1.y, 2)) > pow(o.radius + house_1.radius, 2):
                                 game_world.remove_object(o)
                                 game_world.remove_collision_object(o)
                 game_world.add_object(playing_stone[0], 2)
@@ -170,13 +183,21 @@ def update():
 
     # 엔드가 끝났다면, 다음 엔드로 넘어가기
     if check_finished_end() == True:
+        global current_end
         reset_end()
+        if current_end <= 6:
+            event_pane_1.RGB = (255, 255, 255)
+            event_pane_1.message = f'{current_end}' + ' 엔드'
+        else:
+            playing_background.bgm.stop()
+            event_pane_1.RGB = (255, 255, 0)
+            event_pane_1.message = '경기 종료'
+        event_pane_1.is_presenting = True
 
     # 게임이 끝났다면, 결과창으로 이동
-    if check_finished_game() == True:
-        global current_end
+    if check_finished_game() == True and event_pane_1.is_presenting == False:
         playing_background.bgm.stop()
-        current_end  = 1
+        current_end = 1
         game_framework.change_mode(result_mode)
 
     delay(0.002)
