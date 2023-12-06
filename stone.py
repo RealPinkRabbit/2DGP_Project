@@ -312,7 +312,7 @@ class Idle:
             # stone.vx = 5
             pass
         elif r_down(e):
-            stone.vx, stone.vy = 0, 0
+            # stone.vx, stone.vy = 0, 0
             # stone.x = 400
             # stone.y = 400
             # stone.vx = 0
@@ -466,7 +466,7 @@ class blue_stone:
         self.is_swipping = False
         self.swipped_frame = 0
         self.image_moving_pixel = 0
-        self.power = [25, 30, 35]
+        self.power = [23, 26, 30]
         self.power_pointer = 0
         self.swipping_image_1_pointer = 1
         self.swipping_image_2_pointer = 1
@@ -607,7 +607,7 @@ class red_stone:
         self.is_swipping = False
         self.swipped_frame = 0
         self.image_moving_pixel = 0
-        self.power = [25, 30, 35]
+        self.power = [23, 26, 30]
         self.power_pointer = 0
         self.swipping_image_1_pointer = 1
         self.swipping_image_2_pointer = 1

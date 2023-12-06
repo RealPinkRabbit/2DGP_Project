@@ -179,7 +179,7 @@ def update():
         current_end  = 1
         game_framework.change_mode(result_mode)
 
-    delay(0.005)
+    delay(0.002)
 def draw():
     global playing_stone
     clear_canvas()
