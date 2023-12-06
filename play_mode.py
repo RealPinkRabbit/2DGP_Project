@@ -169,12 +169,12 @@ def update():
     # 엔드가 끝났다면, 다음 엔드로 넘어가기
     if check_finished_end() == True:
         reset_end()
-    delay(0.01)
 
     # 게임이 끝났다면, 결과창으로 이동
     if check_finished_game() == True:
         game_framework.change_mode(result_mode)
 
+    delay(0.005)
 def draw():
     global playing_stone
     clear_canvas()
@@ -217,9 +217,9 @@ def reset_end():
     elif house_1.score_color == 'RED':
         red_score[current_end - 1] = house_1.score
     current_end += 1
-    print(current_end)
-    print(blue_score)
-    print(red_score)
+    # print(current_end)
+    # print(blue_score)
+    # print(red_score)
 
     # 게임월드 돌 삭제
     # for pairs in game_world.objects:
@@ -232,8 +232,8 @@ def reset_end():
     del game_world.collision_pairs['stone:stone']
     game_world.add_collision_pair('stone:stone', None, None)
 
-    print(game_world.objects)
-    print(game_world.collision_pairs)
+    # print(game_world.objects)
+    # print(game_world.collision_pairs)
     playing_stone.clear()
     if first_attack == 'BLUE':
         first_attack = 'RED'
