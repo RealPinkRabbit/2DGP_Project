@@ -15,11 +15,11 @@ from score_pane import score_pane
 canvas_width = 1280
 canvas_height = 800
 
-current_end = 1
+current_end = 6
 total_end = 6
-blue_remained_stone = 8
-red_remained_stone = 8
-blue_score = [0, 0, 0, 0, 0, 0]
+blue_remained_stone = 1
+red_remained_stone = 1
+blue_score = [0, 0, 0, 0, 0, 1]
 red_score = [0, 0, 0, 0, 0, 0]
 playing_stone = []  # moving stone
 playing_stone_pointer = 0
@@ -140,15 +140,17 @@ def update():
                     red_remained_stone -= 1
                     playing_stone.append(blue_stone(200 + 552 // 2, 600, 0, 0))
                 if playing_stone[0].character == 'DUCK':
-                    blue_stone.swipping_image_1 = load_image('Duck_Swipping_1_1280x800.png')
-                    blue_stone.swipping_image_2 = load_image('Duck_Swipping_2_1280x800.png')
-                    red_stone.swipping_image_1 = load_image('Duck_Swipping_1_1280x800.png')
-                    red_stone.swipping_image_2 = load_image('Duck_Swipping_2_1280x800.png')
+                    if blue_remained_stone != 0 or red_remained_stone != 0:
+                        blue_stone.swipping_image_1 = load_image('Duck_Swipping_1_1280x800.png')
+                        blue_stone.swipping_image_2 = load_image('Duck_Swipping_2_1280x800.png')
+                        red_stone.swipping_image_1 = load_image('Duck_Swipping_1_1280x800.png')
+                        red_stone.swipping_image_2 = load_image('Duck_Swipping_2_1280x800.png')
                 elif playing_stone[0].character == 'CAT':
-                    blue_stone.swipping_image_1 = load_image('Cat_Swipping_1_1280x800.png')
-                    blue_stone.swipping_image_2 = load_image('Cat_Swipping_2_1280x800.png')
-                    red_stone.swipping_image_1 = load_image('Cat_Swipping_1_1280x800.png')
-                    red_stone.swipping_image_2 = load_image('Cat_Swipping_2_1280x800.png')
+                    if blue_remained_stone != 0 or red_remained_stone != 0:
+                        blue_stone.swipping_image_1 = load_image('Cat_Swipping_1_1280x800.png')
+                        blue_stone.swipping_image_2 = load_image('Cat_Swipping_2_1280x800.png')
+                        red_stone.swipping_image_1 = load_image('Cat_Swipping_1_1280x800.png')
+                        red_stone.swipping_image_2 = load_image('Cat_Swipping_2_1280x800.png')
                 moved_stone.clear()
                 # 스톤이 지정된 범위를 벗어난 곳에 안착 시, 스톤 제거
                 for pairs in game_world.objects:
@@ -172,6 +174,9 @@ def update():
 
     # 게임이 끝났다면, 결과창으로 이동
     if check_finished_game() == True:
+        global current_end
+        playing_background.bgm.stop()
+        current_end  = 1
         game_framework.change_mode(result_mode)
 
     delay(0.005)

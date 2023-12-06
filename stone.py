@@ -444,6 +444,7 @@ class blue_stone:
     estimated_path_image = None
     swipping_image_1 = None
     swipping_image_2 = None
+    character = 'DUCK'
     minV = 0.02
     vDecRate = 0.995
     slowVDecRate_1 = 0.99
@@ -459,7 +460,7 @@ class blue_stone:
         self.message = ''
         self.m = 100
         self.radius = blue_stone.default_radius
-        self.character = 'DUCK'
+        self.character = str(blue_stone.character)
         self.is_launched = False
         self.is_handling = True
         self.is_swipping = False
@@ -584,6 +585,7 @@ class red_stone:
     estimated_path_image = None
     swipping_image_1 = None
     swipping_image_2 = None
+    character = 'CAT'
     minV = 0.02
     vDecRate = 0.995
     slowVDecRate_1 = 0.99
@@ -599,7 +601,7 @@ class red_stone:
         self.message = ''
         self.m = 100
         self.radius = red_stone.default_radius
-        self.character = 'CAT'
+        self.character = str(red_stone.character)
         self.is_launched = False
         self.is_handling = True
         self.is_swipping = False

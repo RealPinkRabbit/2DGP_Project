@@ -3,6 +3,7 @@ import play_mode
 # import logo_mode as start_mode
 import play_mode as start_mode
 # import title_mode as start_mode
+# import result_mode as start_mode
 import game_framework
 
 open_canvas(play_mode.canvas_width, play_mode.canvas_height, sync=True)
