@@ -15,11 +15,11 @@ from score_pane import score_pane
 canvas_width = 1280
 canvas_height = 800
 
-current_end = 6
+current_end = 1
 total_end = 6
-blue_remained_stone = 1
-red_remained_stone = 1
-blue_score = [0, 0, 0, 0, 0, 1]
+blue_remained_stone = 8
+red_remained_stone = 8
+blue_score = [0, 0, 0, 0, 0, 0]
 red_score = [0, 0, 0, 0, 0, 0]
 playing_stone = []  # moving stone
 playing_stone_pointer = 0
