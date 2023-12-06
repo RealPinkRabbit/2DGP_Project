@@ -18,7 +18,7 @@ canvas_width = 1280
 canvas_height = 800
 
 current_end = 1
-total_end = 6
+total_end = 2
 blue_remained_stone = 8
 red_remained_stone = 8
 blue_score = [0, 0, 0, 0, 0, 0]
@@ -189,7 +189,7 @@ def update():
     if check_finished_end() == True:
         global current_end
         reset_end()
-        if current_end <= 6:
+        if current_end <= 2:
             event_pane_1.RGB = (255, 255, 255)
             event_pane_1.message = f'{current_end}' + ' 엔드'
         else:
