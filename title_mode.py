@@ -1,6 +1,7 @@
 from pico2d import get_events, load_image, clear_canvas, update_canvas, get_time, load_music
 from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP
 
+import explain_mode
 import game_framework
 import play_mode
 
@@ -75,7 +76,7 @@ def handle_events():
                 else:
                     Act_Button_2 = 1
                 if event.type == SDL_MOUSEBUTTONUP:
-                    pass
+                    game_framework.push_mode(explain_mode)
             else:
                 Act_Button_2 = 0
 
