@@ -18,7 +18,8 @@ class house:
         self.score_color = '--'
         self.score = 0
         self.RGB = (0, 0, 0)
-        self.font = load_font('ENCR10B.TTF', 64)
+        # self.font = load_font('ENCR10B.TTF', 64)
+        self.font = load_font('Maplestory Bold.ttf', 64)
 
         if house.image == None:
             house.image = load_image('House_400x400.png')
@@ -33,7 +34,7 @@ class house:
             self.RGB = (255, 0, 0)
         elif self.stones_clone[0][0] == 'BLUE':
             self.RGB = (0, 0, 255)
-        self.font.draw(self.sx - 170, self.sy + 250, f'{self.score_color} : {self.score}', self.RGB)
+        self.font.draw(self.sx - 120, self.sy + 250, f'{self.score_color} : {self.score}', self.RGB)
 
     def update(self):
         self.sx = self.x - play_mode.playing_background.window_left

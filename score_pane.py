@@ -30,14 +30,14 @@ class score_pane:
             if i+1 < play_mode.current_end:
                 self.font.draw(self.x + 165 + i * 40, self.y + 425, f'{play_mode.blue_score[i]}', (255, 255, 255))
             else:
-                self.font.draw(self.x + 165 + i * 40, self.y + 425, f'{play_mode.blue_score[i]}', (255, 255, 255))
-                # self.font.draw(self.x + 170 + i * 40, self.y + 425, '-', (255, 255, 255))
+                # self.font.draw(self.x + 165 + i * 40, self.y + 425, f'{play_mode.blue_score[i]}', (255, 255, 255))
+                self.font.draw(self.x + 170 + i * 40, self.y + 425, '-', (255, 255, 255))
         for i in range(len(play_mode.red_score)):
             if i+1 < play_mode.current_end:
                 self.font.draw(self.x + 165 + i * 40, self.y + 470, f'{play_mode.red_score[i]}', (255, 255, 255))
             else:
-                self.font.draw(self.x + 165 + i * 40, self.y + 470, f'{play_mode.red_score[i]}', (255, 255, 255))
-                # self.font.draw(self.x + 170 + i * 40, self.y + 470, '-', (255, 255, 255))
+                # self.font.draw(self.x + 165 + i * 40, self.y + 470, f'{play_mode.red_score[i]}', (255, 255, 255))
+                self.font.draw(self.x + 170 + i * 40, self.y + 470, '-', (255, 255, 255))
         for i in range(play_mode.blue_remained_stone):
             score_pane.Blue_Stone_image.draw(self.x + 80 + (i%4) * 80, self.y + 140 - (i//4) * 80)
             if i+1 == play_mode.blue_remained_stone and play_mode.playing_stone[0].color == 'BLUE':

@@ -19,8 +19,8 @@ canvas_height = 800
 
 current_end = 1
 total_end = 6
-blue_remained_stone = 1
-red_remained_stone = 1
+blue_remained_stone = 8
+red_remained_stone = 8
 blue_score = [0, 0, 0, 0, 0, 0]
 red_score = [0, 0, 0, 0, 0, 0]
 playing_stone = []  # moving stone
@@ -259,7 +259,9 @@ def reset_end():
     game_world.objects[2].clear()
     game_world.objects[3].clear()
     del game_world.collision_pairs['stone:stone']
+    del game_world.collision_pairs['house:stone']
     game_world.add_collision_pair('stone:stone', None, None)
+    game_world.add_collision_pair('house:stone', house_1, None)
 
     # print(game_world.objects)
     # print(game_world.collision_pairs)
