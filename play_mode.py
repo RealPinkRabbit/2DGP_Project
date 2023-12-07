@@ -42,6 +42,20 @@ def init():
     global event_pane_1
     # global focus
     global focus_1
+    global current_end
+    global total_end
+    global blue_remained_stone
+    global red_remained_stone
+    global blue_remained_stone
+    global blue_score
+    global red_score
+
+    current_end = 1
+    total_end = 6
+    blue_remained_stone = 8
+    red_remained_stone = 8
+    blue_score = [0, 0, 0, 0, 0, 0]
+    red_score = [0, 0, 0, 0, 0, 0]
 
     # focus = load_image('Focus_64x64.png')
     focus_1 = focus()
